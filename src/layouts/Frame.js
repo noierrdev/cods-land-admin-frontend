@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -16,7 +15,8 @@ import MailIcon from '@mui/icons-material/Mail';
 import { Outlet } from 'react-router-dom';
 import Logo from '../assets/images/logo.png'
 import {useNavigate,useLocation} from 'react-router-dom'
-import { Fab } from '@mui/material';
+import { Avatar, Fab } from '@mui/material';
+
 
 const drawerWidth = 240;
 
@@ -30,10 +30,10 @@ export default function FrameLayout(props) {
             position="fixed"
             sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
         >
-            <Toolbar sx={{backgroundColor:"white"}} >
-            {/* <Typography variant="h6" noWrap component="div">
-                Permanent drawer
-            </Typography> */}
+            <Toolbar sx={{backgroundColor:"white",color:"darkgray"}} >
+                <div style={{flexGrow:1}} ></div>
+                <Avatar>k</Avatar>
+                <Typography>Hello</Typography>
             </Toolbar>
         </AppBar>
         <Drawer
@@ -53,7 +53,7 @@ export default function FrameLayout(props) {
             <Toolbar />
             <img src={Logo} style={{width:"40%",marginLeft:"auto",marginRight:"auto"}} />
             <List sx={{padding:'2vw'}} >
-                <ListItem disablePadding>
+                {/* <ListItem disablePadding>
                     {pathname.indexOf('/dashboard')==0?(
                         <Fab style={{width:"100%"}} variant='extended' >Dashboard</Fab>
                     ):(
@@ -61,8 +61,8 @@ export default function FrameLayout(props) {
                             <ListItemText style={{textAlign:"center"}} primary={`Dashboard`} />
                         </ListItemButton>
                     )}
-                </ListItem>
-                <ListItem disablePadding>
+                </ListItem> */}
+                {/* <ListItem disablePadding>
                     {pathname.indexOf('/users')==0?(
                         <Fab style={{width:"100%"}} variant='extended' >Users</Fab>
                     ):(
@@ -70,9 +70,18 @@ export default function FrameLayout(props) {
                             <ListItemText style={{textAlign:"center"}} primary={`Users`} />
                         </ListItemButton>
                     )}
+                </ListItem> */}
+                <ListItem disablePadding>
+                    {pathname==('/products/categories')?(
+                        <Fab style={{width:"100%"}} variant='extended' >Product Categories</Fab>
+                    ):(
+                        <ListItemButton onClick={e=>navigate('/products/categories')} >
+                            <ListItemText style={{textAlign:"center"}} primary={`Product Categories`} />
+                        </ListItemButton>
+                    )}
                 </ListItem>
                 <ListItem disablePadding>
-                    {pathname.indexOf('/products')==0?(
+                    {pathname==('/products')?(
                         <Fab style={{width:"100%"}} variant='extended' >Products</Fab>
                     ):(
                         <ListItemButton onClick={e=>navigate('/products')} >

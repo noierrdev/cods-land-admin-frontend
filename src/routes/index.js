@@ -20,6 +20,10 @@ export default (props)=>{
                     path:"products",
                     element:Loadable(React.lazy(()=>import('../pages/products')))(props),
                 },
+                {
+                    path:"products/categories",
+                    element:Loadable(React.lazy(()=>import('../pages/products/categories')))(props),
+                },
             ]
         },
     ]

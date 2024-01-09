@@ -4,6 +4,8 @@ import AppRoutes from './routes'
 
 import {createTheme,ThemeProvider} from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
+import {SnackbarProvider} from 'notistack'
+
 import {Provider} from 'react-redux'
 import store from './store'
 
@@ -24,9 +26,11 @@ function App() {
       <Provider store={store} >
         <ThemeProvider theme={theme} >
           <CssBaseline/>
-          <BrowserRouter>
-            <AppRoutes testprop={`kkk`} />
-          </BrowserRouter>
+          <SnackbarProvider maxSnack={3} anchorOrigin={{vertical:'top',horizontal:"left"}} >
+            <BrowserRouter>
+              <AppRoutes testprop={`kkk`} />
+            </BrowserRouter>
+          </SnackbarProvider>
         </ThemeProvider>
       </Provider>
     </AppContext.Provider>
