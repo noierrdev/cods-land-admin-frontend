@@ -9,15 +9,26 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Confirm from "../../components/general/Confirm";
 
 const AdminProductsPage=props=>{
     const [PageData,setPageData]=React.useState(null);
     const [NewProduct,setNewProduct]=React.useState(false);
+    const [DeleteProduct,setDeleteProduct]=React.useState(null);
     const getPageData=(page,pagesize)=>{
         axios.post(`${BACKEND_URL}/shop/products/page`,{page,pagesize})
         .then(response=>{
             if(response.data.status==="success"){
                 setPageData(response.data.data)
+            }
+        })
+    }
+    const deleteProduct=(product_id)=>{
+        axios.delete(`${BACKEND_URL}/shop/products/${product_id}`)
+        .then(response=>{
+            if(response.data.status==="success"){
+                setDeleteProduct(null);
+                getPageData(PageData.page,PageData.pagesize)
             }
         })
     }
@@ -27,7 +38,8 @@ const AdminProductsPage=props=>{
     },[])
     const headers=[
         {
-            title:"Product Image"
+            title:"Product Image",
+            component:(row)=><img style={{width:"5vw"}} src={`data:${row.image&&row.image.mimetype};base64, ${row.image&&row.image.data}`} />
         },
         {
             title:"Product Name",
@@ -46,7 +58,7 @@ const AdminProductsPage=props=>{
         },
         {
             title:"Delete",
-            component:(row)=><IconButton onClick={e=>console.log(row)} ><DeleteOutlined/></IconButton>
+            component:(row)=><IconButton onClick={e=>setDeleteProduct(row._id)} ><DeleteOutlined/></IconButton>
         }
     ]
     return (
@@ -76,6 +88,7 @@ const AdminProductsPage=props=>{
                 </Button>
                 </DialogActions>
             </Dialog>
+            <Confirm open={DeleteProduct?true:false} onOk={()=>{deleteProduct(DeleteProduct)}} onCancel={e=>setDeleteProduct(null)} />
         </>
     )
 }
