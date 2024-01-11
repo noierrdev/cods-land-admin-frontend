@@ -84,13 +84,14 @@ const AdminOrdersPage=props=>{
                             <List>
                                 {ShowOrder.products.map((oneProduct,index)=>{
                                     return (
-                                        <ListItem>
+                                        <ListItem key={index} >
                                             <ListItemAvatar>
-                                                <img src={`${BACKEND_URL}/shop/products/${oneProduct.product._id}/image`} />
+                                                <img style={{width:"10vh"}} src={`${BACKEND_URL}/shop/products/${oneProduct.product._id}/image`} />
                                             </ListItemAvatar>
-                                            <ListItemText primary={oneProduct.product.title+" X "+oneProduct.count} secondary={
+                                            <ListItemText sx={{marginLeft:2}} primary={oneProduct.product.title+" X "+oneProduct.count} secondary={
                                                 oneProduct.product.price+" X "+oneProduct.count+" = "+(Number(oneProduct.product.price)*Number(oneProduct.count)+" USD $")
-                                                } ></ListItemText>
+                                                } >
+                                            </ListItemText>
                                         </ListItem>
                                     )
                                 })}
