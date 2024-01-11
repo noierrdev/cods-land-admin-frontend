@@ -14,6 +14,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Confirm from "../../components/general/Confirm";
 
 const AdminOrdersPage=props=>{
     const [PageData,setPageData]=React.useState(null);
@@ -60,7 +61,7 @@ const AdminOrdersPage=props=>{
         },
         {
             title:"Delete",
-            component:row=><IconButton><DeleteOutlined/></IconButton>
+            component:row=><IconButton onClick={e=>setDeleteOrder(row._id)} ><DeleteOutlined/></IconButton>
         }
     ]
     return (
@@ -85,7 +86,7 @@ const AdminOrdersPage=props=>{
                                     return (
                                         <ListItem>
                                             <ListItemAvatar>
-                                                <img src={`${BACKEND_URL}/shop/products/${oneProduct._id}/image`} />
+                                                <img src={`${BACKEND_URL}/shop/products/${oneProduct.product._id}/image`} />
                                             </ListItemAvatar>
                                             <ListItemText primary={oneProduct.product.title+" X "+oneProduct.count} secondary={
                                                 oneProduct.product.price+" X "+oneProduct.count+" = "+(Number(oneProduct.product.price)*Number(oneProduct.count)+" USD $")
@@ -102,6 +103,7 @@ const AdminOrdersPage=props=>{
                 {/* <Button variant="contained" onClick={e=>saveProduct()}>Save</Button> */}
                 </DialogActions>
             </Dialog>
+            <Confirm open={DeleteOrder?true:false} onOk={e=>deleteOrder(DeleteOrder)} onCancel={e=>setDeleteOrder(null)} />
         </>
     )
 }

@@ -37,7 +37,7 @@ export default function FrameLayout(props) {
                 {authData&&<>
                 <Avatar sx={{margin:1}} src={`${BACKEND_URL}/auth/avatars/${authData.email}`} ></Avatar>
                 <div>
-                    <Typography sx={{marginTop:2,color:"black"}} >{authData.fullname}</Typography>
+                    <Typography sx={{marginTop:2,color:"gray"}} >{authData.fullname}</Typography>
                     <p style={{marginTop:"1px",color:"darkgray"}} >{authData.email}</p>
                 </div>
                 </>}
