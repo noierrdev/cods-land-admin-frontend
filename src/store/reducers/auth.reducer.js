@@ -3,13 +3,11 @@ import {createSlice} from '@reduxjs/toolkit'
 export const authSlice=createSlice({
     name:"auth",
     initialState:{
-        email:null,
-        fullname:null
+        authData:null
     },
     reducers:{
         authSuccess:(state,action)=>{
-            state.email=action.email;
-            state.fullname=action.fullname;
+            state.authData=action.payload
         },
         signout:(state)=>{
             sessionStorage.removeItem('token');

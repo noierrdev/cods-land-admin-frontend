@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell,{tableCellClasses} from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
@@ -16,6 +16,29 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { TableHead } from '@mui/material';
+import {styled} from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    textAlign:"left"
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -107,21 +130,36 @@ export default function MyDataTable(props) {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+      <Table size='small' sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
-          <TableRow>
-            {props.headers.map((header,index)=>{
-              return (<TableCell key={index} >{header.title}</TableCell>)
+          <TableRow >
+            {props.headers&&props.headers.map((header,index)=>{
+              return (<StyledTableCell align='left' key={index} >{header.title}</StyledTableCell>)
             })}
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.pagedata.map((row,index) => (
-            <TableRow key={index}>
+          {props.pagedata&&props.pagedata.map((row,index) => (
+            <TableRow hover selected key={index}>
               {props.headers.map((header,index)=>{
-                return (<TableCell key={index} >{
-                  header.component?header.component(row):(row[header.body])
-                }</TableCell>)
+                if(header.tooltip) return (
+                  <TableCell align='left' key={index} >
+                    <Tooltip title={header.tooltip(row)} >
+                      <div>
+                        {
+                          header.component?header.component(row):(row[header.body])
+                        }
+                      </div>
+                    </Tooltip>
+                  </TableCell>
+                )
+                else return (
+                  <TableCell align='left' key={index} >
+                    {
+                      header.component?header.component(row):(row[header.body])
+                    }
+                  </TableCell>
+                )
               })}
             </TableRow>
           ))}

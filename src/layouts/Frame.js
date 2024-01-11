@@ -16,6 +16,8 @@ import { Outlet } from 'react-router-dom';
 import Logo from '../assets/images/logo.png'
 import {useNavigate,useLocation} from 'react-router-dom'
 import { Avatar, Fab } from '@mui/material';
+import { BACKEND_URL } from '../AppConfigs';
+import { useSelector } from 'react-redux';
 
 
 const drawerWidth = 240;
@@ -23,17 +25,22 @@ const drawerWidth = 240;
 export default function FrameLayout(props) {
     const navigate=useNavigate()
     const {pathname}=useLocation();
-    
+    const authData=useSelector(reducer=>reducer.authReducer.authData);
     return (
         <Box sx={{ display: 'flex' }}>
         <AppBar
             position="fixed"
             sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
         >
-            <Toolbar sx={{backgroundColor:"white",color:"darkgray"}} >
+            <Toolbar sx={{backgroundColor:"white"}} >
                 <div style={{flexGrow:1}} ></div>
-                <Avatar>k</Avatar>
-                <Typography>Hello</Typography>
+                {authData&&<>
+                <Avatar sx={{margin:1}} src={`${BACKEND_URL}/auth/avatars/${authData.email}`} ></Avatar>
+                <div>
+                    <Typography sx={{marginTop:2,color:"black"}} >{authData.fullname}</Typography>
+                    <p style={{marginTop:"1px",color:"darkgray"}} >{authData.email}</p>
+                </div>
+                </>}
             </Toolbar>
         </AppBar>
         <Drawer
@@ -72,20 +79,29 @@ export default function FrameLayout(props) {
                     )}
                 </ListItem> */}
                 <ListItem disablePadding>
-                    {pathname==('/products/categories')?(
-                        <Fab style={{width:"100%"}} variant='extended' >Product Categories</Fab>
+                    {pathname==('/admin/products/categories')?(
+                        <Fab style={{width:"100%"}} variant='extended' >Categories</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/products/categories')} >
-                            <ListItemText style={{textAlign:"center"}} primary={`Product Categories`} />
+                        <ListItemButton onClick={e=>navigate('/admin/products/categories')} >
+                            <ListItemText style={{textAlign:"center"}} primary={`Categories`} />
                         </ListItemButton>
                     )}
                 </ListItem>
                 <ListItem disablePadding>
-                    {pathname==('/products')?(
+                    {pathname==('/admin/products')?(
                         <Fab style={{width:"100%"}} variant='extended' >Products</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/products')} >
+                        <ListItemButton onClick={e=>navigate('/admin/products')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Products`} />
+                        </ListItemButton>
+                    )}
+                </ListItem>
+                <ListItem disablePadding>
+                    {pathname==('/admin/orders')?(
+                        <Fab style={{width:"100%"}} variant='extended' >Orders</Fab>
+                    ):(
+                        <ListItemButton onClick={e=>navigate('/admin/orders')} >
+                            <ListItemText style={{textAlign:"center"}} primary={`Orders`} />
                         </ListItemButton>
                     )}
                 </ListItem>

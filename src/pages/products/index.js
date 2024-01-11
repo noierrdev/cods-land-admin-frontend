@@ -89,8 +89,12 @@ const AdminProductsPage=props=>{
             body:"title"
         },
         {
+            title:"Category",
+            component:row=><Typography>{row.category.title}</Typography>
+        },
+        {
             title:"Price",
-            body:"price"
+            component:row=><Typography>{row.price+" $"}</Typography>
         },
         {
             title:"Count"
@@ -109,7 +113,7 @@ const AdminProductsPage=props=>{
         <>
             <Typography variant="h3" component={`h3`} >Products</Typography>
             <Fab sx={{margin:1}} onClick={e=>setNewProduct(true)} variant="extended" color="primary" ><AddOutlined/>New Product</Fab>
-            <MyDataTable headers={headers} page={PageData&&PageData.page} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumbers} pagedata={PageData?PageData.pagedata:[]} onFetchData={(page,pagesize)=>console.log(page,pagesize)} />
+            <MyDataTable headers={headers} page={PageData&&PageData.page} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumbers} pagedata={PageData?PageData.pagedata:[]} onFetchData={(page,pagesize)=>getPageData(page,pagesize)} />
             <Dialog
                 open={NewProduct}
                 onClose={e=>setNewProduct(false)}
@@ -180,8 +184,8 @@ const AdminProductsPage=props=>{
                 <input hidden onChange={e=>setProductImage(e.target.files[0])} type="file" ref={refImage} />
                 </DialogContent>
                 <DialogActions>
-                <Button onClick={e=>setNewProduct(false)}>Cancel</Button>
-                <Button onClick={e=>saveProduct()}>Subscribe</Button>
+                <Button variant="outlined" onClick={e=>setNewProduct(false)}>Cancel</Button>
+                <Button variant="contained" onClick={e=>saveProduct()}>Save</Button>
                 </DialogActions>
             </Dialog>
             <Confirm open={DeleteProduct?true:false} onOk={()=>{deleteProduct(DeleteProduct)}} onCancel={e=>setDeleteProduct(null)} />
