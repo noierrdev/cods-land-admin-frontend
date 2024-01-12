@@ -12,36 +12,73 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import { Outlet } from 'react-router-dom';
 import Logo from '../assets/images/logo.png'
 import {useNavigate,useLocation} from 'react-router-dom'
 import { Avatar, Fab } from '@mui/material';
 import { BACKEND_URL } from '../AppConfigs';
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import {signout} from '../store/reducers/auth.reducer'
 
 const drawerWidth = 240;
 
 export default function FrameLayout(props) {
+    const dispatch=useDispatch();
     const navigate=useNavigate()
     const {pathname}=useLocation();
     const authData=useSelector(reducer=>reducer.authReducer.authData);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const sign_out=()=>{
+        dispatch(signout());
+        handleClose()
+        navigate('/')
+    }
+    const handleChange = (event) => {
+    };
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     return (
         <Box sx={{ display: 'flex' }}>
         <AppBar
             position="fixed"
             sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
         >
-            <Toolbar sx={{backgroundColor:"white"}} >
+            <Toolbar  sx={{backgroundColor:"white"}} >
                 <div style={{flexGrow:1}} ></div>
                 {authData&&<>
-                <Avatar sx={{margin:1}} src={`${BACKEND_URL}/auth/avatars/${authData.email}`} ></Avatar>
+                <Avatar onMouseOver={handleMenu} sx={{margin:1}} src={`${BACKEND_URL}/auth/avatars/${authData.email}`} ></Avatar>
                 <div>
                     <Typography sx={{marginTop:2,color:"gray"}} >{authData.fullname}</Typography>
                     <p style={{marginTop:"1px",color:"darkgray"}} >{authData.email}</p>
                 </div>
                 </>}
             </Toolbar>
+            <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                // onMouseOut={handleClose}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={sign_out}>Sign Out</MenuItem>
+            </Menu>
         </AppBar>
         <Drawer
             sx={{

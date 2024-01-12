@@ -27,6 +27,10 @@ const AdminProductCategoriesPage=props=>{
         axios.post(`${BACKEND_URL}/shop/categories`,{
             title:refTitle.current.value,
             description:refDescription.current.value
+        },{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
         })
         .then(response=>{
             if(response.data.status=="success"){
@@ -37,7 +41,11 @@ const AdminProductCategoriesPage=props=>{
         })
     }
     const deleteCategory=(category_id)=>{
-        axios.delete(`${BACKEND_URL}/shop/categories/${category_id}`)
+        axios.delete(`${BACKEND_URL}/shop/categories/${category_id}`,{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
         .then(response=>{
             if(response.data.status=="success"){
                 getPageData(PageData.page,PageData.pagesize);
@@ -57,10 +65,10 @@ const AdminProductCategoriesPage=props=>{
             }
         })
     }
-    React.useEffect(()=>{
-        if(!PageData)
-        getPageData(0,10)
-    },[])
+    // React.useEffect(()=>{
+    //     if(!PageData)
+    //     getPageData(0,10)
+    // },[])
     const headers=[
         {
             title:"Title",

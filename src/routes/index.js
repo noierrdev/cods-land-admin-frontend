@@ -8,7 +8,7 @@ import {authSuccess} from '../store/reducers/auth.reducer'
 export default (props)=>{
     const dispatch=useDispatch()
     const navigate=useNavigate()
-    const routes=[
+    const routes= [
         {
             path:"/",
             element:Loadable(React.lazy(()=>import('../layouts/Default')))(props),
@@ -36,33 +36,46 @@ export default (props)=>{
                     element:Loadable(React.lazy(()=>import('../pages/users')))(props),
                 },
                 {
+                    path:"products/categories",
+                    element:Loadable(React.lazy(()=>import('../pages/products/categories')))(props),
+                    auth:true
+                },
+                {
                     path:"products",
                     auth:true,
                     element:Loadable(React.lazy(()=>import('../pages/products')))(props),
                 },
-                {
-                    path:"products/categories",
-                    element:Loadable(React.lazy(()=>import('../pages/products/categories')))(props),
-                },
+                
                 {
                     path:"orders",
                     element:Loadable(React.lazy(()=>import('../pages/orders')))(props),
+                    auth:true
                 },
             ]
         }
         
     ]
-    // console.log(matchRoutes(routes,window.location.pathname))
-    if(sessionStorage.getItem('token'))
-    axios.get(`${BACKEND_URL}/auth/verify`,{
-        headers:{
-            token:sessionStorage.getItem("token")
-        }
-    })
-    .then(response=>{
-        if(response.data.status=="success"){
-            dispatch(authSuccess(response.data.data))
-        }
-    })
+    React.useEffect(()=>{
+        axios.get(`${BACKEND_URL}/auth/verify`,{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
+        .then(response=>{
+            if(response.data.status=="success"){
+                dispatch(authSuccess(response.data.data))
+            }else{
+                const route=matchRoutes(routes,window.location)[matchRoutes(routes,window.location).length-1];
+                if(!route.route.auth) return <Redirect to="/" />
+            }
+        })
+    },[])
     return useRoutes(routes);
+}
+const Redirect=props=>{
+    const navigate=useNavigate()
+    React.useEffect(()=>{
+        navigate(props.to)
+    },[])
+    return <></>
 }

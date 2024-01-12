@@ -28,7 +28,7 @@ function App() {
           <CssBaseline/>
           <SnackbarProvider maxSnack={3} anchorOrigin={{vertical:'top',horizontal:"left"}} >
             <BrowserRouter>
-              <AppRoutes testprop={`kkk`} />
+              <AppRoutes/>
             </BrowserRouter>
           </SnackbarProvider>
         </ThemeProvider>

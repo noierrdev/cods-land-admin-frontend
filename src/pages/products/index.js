@@ -13,6 +13,10 @@ import Confirm from "../../components/general/Confirm";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useSnackbar } from "notistack";
+import querystringify from 'querystringify'
+import { useLocation, useNavigate, useNavigation} from 'react-router-dom'
+import useAuth from "../../hooks/useAuth";
+
 const AdminProductsPage=props=>{
     const [PageData,setPageData]=React.useState(null);
     const [NewProduct,setNewProduct]=React.useState(false);
@@ -25,8 +29,14 @@ const AdminProductsPage=props=>{
     const refPrice=React.useRef(null);
     const refCategory=React.useRef(null);
     const refImage=React.useRef(null);
+    const {search}=useLocation()
+    const navigate=useNavigate()
+    useAuth()
+    
     const getPageData=(page,pagesize)=>{
-        axios.post(`${BACKEND_URL}/shop/products/page`,{page,pagesize})
+        axios.post(`${BACKEND_URL}/shop/products/page`,{
+            page,pagesize
+        })
         .then(response=>{
             if(response.data.status==="success"){
                 setPageData(response.data.data)
@@ -34,7 +44,11 @@ const AdminProductsPage=props=>{
         })
     }
     const deleteProduct=(product_id)=>{
-        axios.delete(`${BACKEND_URL}/shop/products/${product_id}`)
+        axios.delete(`${BACKEND_URL}/shop/products/${product_id}`,{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
         .then(response=>{
             if(response.data.status==="success"){
                 snackbar.enqueueSnackbar("Deleted Successfully",{variant:"success"})
@@ -55,7 +69,11 @@ const AdminProductsPage=props=>{
         myForm.append('category',refCategory.current.value);
         myForm.append('price',refPrice.current.value);
         myForm.append('image',ProductImage);
-        axios.post(`${BACKEND_URL}/shop/products`,myForm)
+        axios.post(`${BACKEND_URL}/shop/products`,myForm,{
+            headers:{
+                toekn:sessionStorage.getItem('token')
+            }
+        })
         .then(response=>{
             if(response.data.status==="success"){
                 setNewProduct(false);
@@ -64,13 +82,10 @@ const AdminProductsPage=props=>{
                 refPrice.current.value="";
                 setProductImage(null)
                 getPageData(PageData.page,PageData.pagesize);
+                snackbar.enqueueSnackbar("Saved successfully",{variant:"success"})
             }
         })
     }
-    React.useEffect(()=>{
-        if(!PageData)
-            getPageData(0,10)
-    },[])
     React.useEffect(()=>{
         axios.get(`${BACKEND_URL}/shop/categories`)
         .then(response=>{

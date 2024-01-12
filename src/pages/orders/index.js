@@ -1,4 +1,4 @@
-import { IconButton, Typography } from "@mui/material";
+import { Divider, IconButton, Typography } from "@mui/material";
 import React from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
 import axios from 'axios'
@@ -30,7 +30,11 @@ const AdminOrdersPage=props=>{
         })
     }
     const deleteOrder=(order_id)=>{
-        axios.delete(`${BACKEND_URL}/shop/orders/${order_id}`)
+        axios.delete(`${BACKEND_URL}/shop/orders/${order_id}`,{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
         .then(response=>{
             if(response.data.status==="success"){
                 snackbar.enqueueSnackbar("Deleted successfully",{variant:'success'})
@@ -98,6 +102,9 @@ const AdminOrdersPage=props=>{
                             </List>
                         </>
                     )}
+                    <Divider/>
+                    <Typography component={`h3`} variant="h3" >Total: {ShowOrder&&ShowOrder.price} USD $</Typography>
+                    <Typography component={`h5`} variant="h5">{ShowOrder&&ShowOrder.createdAt.slice(0,10)}</Typography>
                 </DialogContent>
                 <DialogActions>
                 {/* <Button variant="outlined" onClick={e=>setShowOrder(false)}>Cancel</Button> */}

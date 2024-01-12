@@ -11,8 +11,7 @@ export const authSlice=createSlice({
         },
         signout:(state)=>{
             sessionStorage.removeItem('token');
-            state.email=null;
-            state.fullname=null;
+            state.authData=null
         }
     }
 })

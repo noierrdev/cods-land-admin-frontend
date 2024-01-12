@@ -124,9 +124,8 @@ export default function MyDataTable(props) {
   };
 
   React.useEffect(()=>{
-      if(page>=0)
         props.onFetchData(page,rowsPerPage)
-  },[page])
+  },[page,rowsPerPage])
 
   return (
     <TableContainer component={Paper}>
@@ -170,7 +169,7 @@ export default function MyDataTable(props) {
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
               count={props.total?props.total:10}
-              rowsPerPage={props.pagesize?props.pagesize:rowsPerPage}
+              rowsPerPage={rowsPerPage}
               page={props.page?props.page:page}
               SelectProps={{
                 inputProps: {
