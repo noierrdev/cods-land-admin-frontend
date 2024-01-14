@@ -22,7 +22,11 @@ const AdminOrdersPage=props=>{
     const [ShowOrder,setShowOrder]=React.useState(null);
     const snackbar=useSnackbar()
     const getPageData=(page,pagesize)=>{
-        axios.post(`${BACKEND_URL}/shop/orders/page`,{page,pagesize})
+        axios.post(`${BACKEND_URL}/shop/orders/page`,{page,pagesize},{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
         .then(response=>{
             if(response.data.status==="success"){
                 setPageData(response.data.data)
