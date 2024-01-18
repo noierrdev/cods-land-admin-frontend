@@ -146,7 +146,7 @@ export default function MyDataTable(props) {
                     <Tooltip title={header.tooltip(row)} >
                       <div>
                         {
-                          header.component?header.component(row):(row[header.body])
+                          header.component?header.component(row):(row[header.body]&&row[header.body])
                         }
                       </div>
                     </Tooltip>
@@ -155,7 +155,7 @@ export default function MyDataTable(props) {
                 else return (
                   <TableCell align='left' key={index} >
                     {
-                      header.component?header.component(row):(row[header.body])
+                      header.component?header.component(row):(row[header.body]&&row[header.body])
                     }
                   </TableCell>
                 )

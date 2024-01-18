@@ -5,7 +5,7 @@ import axios from 'axios'
 import { BACKEND_URL } from '../AppConfigs';
 import {useSelector,useDispatch} from 'react-redux'
 import {authSuccess} from '../store/reducers/auth.reducer'
-export default (props)=>{
+const AppRoutes = (props)=>{
     const dispatch=useDispatch()
     const navigate=useNavigate()
     const routes= [
@@ -52,6 +52,10 @@ export default (props)=>{
                     auth:true
                 },
             ]
+        },
+        {
+            path:"*",
+            element:Loadable(React.lazy(()=>import('../pages/index')))(props), 
         }
         
     ]
@@ -79,3 +83,4 @@ const Redirect=props=>{
     },[])
     return <></>
 }
+export default AppRoutes;

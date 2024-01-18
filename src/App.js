@@ -1,3 +1,4 @@
+import React from 'react'
 import AppContext from "./AppContext";
 import {BrowserRouter} from 'react-router-dom'
 import AppRoutes from './routes'
@@ -27,9 +28,11 @@ function App() {
         <ThemeProvider theme={theme} >
           <CssBaseline/>
           <SnackbarProvider maxSnack={3} anchorOrigin={{vertical:'top',horizontal:"left"}} >
+            
             <BrowserRouter>
               <AppRoutes/>
             </BrowserRouter>
+            
           </SnackbarProvider>
         </ThemeProvider>
       </Provider>

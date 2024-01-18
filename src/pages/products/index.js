@@ -3,7 +3,7 @@ import MyDataTable from "../../components/datagrid/MyDataTable";
 import { Fab, Typography,Button,IconButton, Paper, MenuItem } from "@mui/material";
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
-import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined} from '@mui/icons-material'
+import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined} from '@mui/icons-material'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -23,12 +23,15 @@ const AdminProductsPage=props=>{
     const [DeleteProduct,setDeleteProduct]=React.useState(null);
     const [ProductImage,setProductImage]=React.useState(null);
     const [AllCategories, setAllCategories]=React.useState(null);
+    const [UploadFile,setUploadFile]=React.useState(false)
+    const [ProductFile,setProductFile]=React.useState(null);
     const snackbar=useSnackbar();
     const refTitle=React.useRef(null);
     const refDescription=React.useRef(null);
     const refPrice=React.useRef(null);
     const refCategory=React.useRef(null);
     const refImage=React.useRef(null);
+    const refCSV=React.useRef(null)
     const {search}=useLocation()
     const navigate=useNavigate()
     useAuth()
@@ -94,10 +97,23 @@ const AdminProductsPage=props=>{
             }
         })
     },[])
+    const uploadCSV=()=>{
+        if(!ProductFile) return;
+        const myForm=new FormData();
+        myForm.append('csv',ProductFile)
+        axios.post(`${BACKEND_URL}/admin/upload-csv`,myForm,{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
+        .then(response=>{
+            console.log(response)
+        })
+    }
     const headers=[
         {
             title:"Product Image",
-            component:(row)=><img style={{width:"5vw"}} src={`${BACKEND_URL}/shop/products/${row._id}/image`} />
+            component:(row)=>row.image_url?<img style={{width:"5vw"}} src={row.image_url} />:<img style={{width:"5vw"}} src={`${BACKEND_URL}/shop/products/${row._id}/image`} />
         },
         {
             title:"Product Name",
@@ -105,7 +121,7 @@ const AdminProductsPage=props=>{
         },
         {
             title:"Category",
-            component:row=><Typography>{row.category.title}</Typography>
+            component:row=><Typography>{row.category&&row.category.title&&row.category.title}</Typography>
         },
         {
             title:"Price",
@@ -127,7 +143,10 @@ const AdminProductsPage=props=>{
     return (
         <>
             <Typography variant="h3" component={`h3`} >Products</Typography>
-            <Fab sx={{margin:1}} onClick={e=>setNewProduct(true)} variant="extended" color="primary" ><AddOutlined/>New Product</Fab>
+            <div>
+                <Fab sx={{margin:1}} onClick={e=>setNewProduct(true)} variant="extended" color="primary" ><AddOutlined/>New Product</Fab>
+                <Fab sx={{margin:1}} onClick={e=>setUploadFile(true)} variant="extended" color="primary" ><CloudUploadOutlined/> Upload CSV</Fab>
+            </div>
             <MyDataTable headers={headers} page={PageData&&PageData.page} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumbers} pagedata={PageData?PageData.pagedata:[]} onFetchData={(page,pagesize)=>getPageData(page,pagesize)} />
             <Dialog
                 open={NewProduct}
@@ -201,6 +220,33 @@ const AdminProductsPage=props=>{
                 <DialogActions>
                 <Button variant="outlined" onClick={e=>setNewProduct(false)}>Cancel</Button>
                 <Button variant="contained" onClick={e=>saveProduct()}>Save</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={UploadFile}
+                onClose={e=>setUploadFile(false)}
+                fullWidth
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>Upload CSV File</DialogTitle>
+                <DialogContent>
+                <Paper onClick={e=>refCSV.current.click()} elevation={8}  sx={{padding:5,textAlign:"center"}} >
+                    {ProductFile?(
+                        <TableChartOutlined sx={{fontSize:"5vw",color:'darkgray'}} />
+                    ):(
+                        <>
+                        {/* <ImageOutlined style={{fontSize:"10vw",color:"gray"}} /> */}
+                        <Typography component={`h5`} sx={{color:"gray"}} variant="h5" >Click to Upload CSV File</Typography>
+                        </>
+                    )}
+                </Paper>
+                <input hidden onChange={e=>setProductImage(e.target.files[0])} type="file" ref={refImage} />
+                <input hidden accept=".csv" onChange={e=>setProductFile(e.target.files[0])} type="file" ref={refCSV} />
+                </DialogContent>
+                <DialogActions>
+                <Button variant="outlined" onClick={e=>setNewProduct(false)}>Cancel</Button>
+                <Button variant="contained" onClick={e=>uploadCSV()}>Save</Button>
                 </DialogActions>
             </Dialog>
             <Confirm open={DeleteProduct?true:false} onOk={()=>{deleteProduct(DeleteProduct)}} onCancel={e=>setDeleteProduct(null)} />
