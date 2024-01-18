@@ -146,7 +146,7 @@ const AdminProductsPage=props=>{
                         select
                         inputRef={refCategory}
                         variant="outlined"
-                        defaultValue={AllCategories&&AllCategories[0]._id}
+                        defaultValue={AllCategories&&AllCategories[0]&&AllCategories[0]._id}
                     >
                         {AllCategories&&AllCategories.map((oneCategory,index)=>{
                             return (
