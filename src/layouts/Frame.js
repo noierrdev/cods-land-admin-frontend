@@ -142,6 +142,15 @@ export default function FrameLayout(props) {
                         </ListItemButton>
                     )}
                 </ListItem>
+                <ListItem disablePadding>
+                    {pathname==('/admin/users')?(
+                        <Fab style={{width:"100%"}} variant='extended' >Users</Fab>
+                    ):(
+                        <ListItemButton onClick={e=>navigate('/admin/users')} >
+                            <ListItemText style={{textAlign:"center"}} primary={`Users`} />
+                        </ListItemButton>
+                    )}
+                </ListItem>
             </List>
         </Drawer>
         <Box
