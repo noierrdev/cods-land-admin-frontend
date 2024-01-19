@@ -143,7 +143,7 @@ export default function MyDataTable(props) {
               {props.headers.map((header,index)=>{
                 if(header.tooltip) return (
                   <TableCell align='left' key={index} >
-                    <Tooltip title={header.tooltip(row)} >
+                    <Tooltip title={<div dangerouslySetInnerHTML={{ __html: header.tooltip(row) }} ></div>} >
                       <div>
                         {
                           header.component?header.component(row):(row[header.body]&&row[header.body])

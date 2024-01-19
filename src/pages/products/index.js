@@ -113,11 +113,13 @@ const AdminProductsPage=props=>{
     const headers=[
         {
             title:"Product Image",
-            component:(row)=>row.image_url?<img style={{width:"5vw"}} src={row.image_url} />:<img style={{width:"5vw"}} src={`${BACKEND_URL}/shop/products/${row._id}/image`} />
+            component:(row)=>row.image_url?<img style={{width:"5vw"}} src={row.image_url} />:<img style={{width:"5vw"}} src={`${BACKEND_URL}/shop/products/${row._id}/image`} />,
+            tooltip:row=>row.description
         },
         {
             title:"Product Name",
-            body:"title"
+            body:"title",
+            tooltip:row=>row.description
         },
         {
             title:"Category",

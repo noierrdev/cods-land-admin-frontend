@@ -6,8 +6,10 @@ import { BACKEND_URL } from "../AppConfigs";
 
 const useAuth=async ()=>{
     const navigate=useNavigate();
+    const authData=useSelector(reducer=>reducer.authReducer.authData);
+    if(!authData) return document.location="/";
     const token=sessionStorage.getItem('token');
-    if(!token) return navigate('/')
+    if(!token) return document.location="/";
     
 }
 export default useAuth;
