@@ -96,7 +96,7 @@ export default function FrameLayout(props) {
         >
             <Toolbar />
             <img src={Logo} style={{width:"40%",marginLeft:"auto",marginRight:"auto"}} />
-            <List sx={{padding:'2vw'}} >
+            <List  >
                 {/* <ListItem disablePadding>
                     {pathname.indexOf('/dashboard')==0?(
                         <Fab style={{width:"100%"}} variant='extended' >Dashboard</Fab>
@@ -115,19 +115,19 @@ export default function FrameLayout(props) {
                         </ListItemButton>
                     )}
                 </ListItem> */}
-                <ListItem disablePadding>
+                <ListItem disablePadding >
                     {pathname==('/admin/products/categories')?(
-                        <Fab style={{width:"100%"}} variant='extended' >Categories</Fab>
+                        <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Categories</Fab>
                     ):(
-                        // <ListItemButton sx={{width:"100%"}} onClick={e=>navigate('/admin/products/categories')} >
-                        //     <ListItemText style={{textAlign:"center"}} primary={`Categories`} />
-                        // </ListItemButton>
-                        <Fab color='primary' style={{width:"100%"}} variant='extended' >Categories</Fab>
+                        <ListItemButton  onClick={e=>navigate('/admin/products/categories')} >
+                            <ListItemText style={{textAlign:"center"}} primary={`Categories`} />
+                        </ListItemButton>
+                        // <Fab color='primary' style={{width:"100%"}} variant='extended' >Categories</Fab>
                     )}
                 </ListItem>
                 <ListItem disablePadding>
                     {pathname==('/admin/products')?(
-                        <Fab style={{width:"100%"}} variant='extended' >Products</Fab>
+                        <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Products</Fab>
                     ):(
                         <ListItemButton onClick={e=>navigate('/admin/products')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Products`} />
@@ -136,7 +136,7 @@ export default function FrameLayout(props) {
                 </ListItem>
                 <ListItem disablePadding>
                     {pathname==('/admin/orders')?(
-                        <Fab style={{width:"100%"}} variant='extended' >Orders</Fab>
+                        <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Orders</Fab>
                     ):(
                         <ListItemButton onClick={e=>navigate('/admin/orders')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Orders`} />
@@ -145,7 +145,7 @@ export default function FrameLayout(props) {
                 </ListItem>
                 <ListItem disablePadding>
                     {pathname==('/admin/users')?(
-                        <Fab style={{width:"100%"}} variant='extended' >Users</Fab>
+                        <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Users</Fab>
                     ):(
                         <ListItemButton onClick={e=>navigate('/admin/users')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Users`} />
