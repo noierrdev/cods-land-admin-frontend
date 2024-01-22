@@ -1,14 +1,14 @@
 import React from 'react'
 import { Fab, IconButton, Typography } from "@mui/material"
 import MyDataTable from '../../components/datagrid/MyDataTable'
-import { AddOutlined, DeleteOutlined } from "@mui/icons-material"
+import { AddOutlined, BlockOutlined, CheckOutlined, DeleteOutlined } from "@mui/icons-material"
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
 
 const AdminUsersPage=props=>{
     const [PageData,setPageData]=React.useState(null)
     const getPageData=(page,pagesize)=>{
-        axios.post(`${BACKEND_URL}/admin/users`,{
+        axios.post(`${BACKEND_URL}/admin/users/page`,{
             page,pagesize
         },{
             headers:{
@@ -23,30 +23,39 @@ const AdminUsersPage=props=>{
     }
     const headers=[
         {
-            title:"Fullname"
+            title:"Fullname",
+            body:"fullname"
         },
         {
-            title:"Email"
+            title:"Email",
+            body:"email"
         },
         {
-            title:"Gender"
+            title:"Gender",
+            body:"gender"
         },
         {
-            title:"Allow"
+            title:"Allow",
+            component:(row)=><IconButton>{row.allow?<CheckOutlined color='primary'></CheckOutlined>:<BlockOutlined color='secondary' ></BlockOutlined>}</IconButton>
         },
         {
-            title:"Verified"
+            title:"Verified",
+            component:(row)=><IconButton>{row.verified?<CheckOutlined color='primary'></CheckOutlined>:<BlockOutlined color='secondary' ></BlockOutlined>}</IconButton>
+        },
+        {
+            title:"Superuser",
+            component:row=><IconButton>{row.superuser?<CheckOutlined color='primary' ></CheckOutlined>:<BlockOutlined color='secondary' ></BlockOutlined>}</IconButton>
         },
         {
             title:"Delete",
-            component:row=><IconButton><DeleteOutlined/></IconButton>
+            component:row=><IconButton><DeleteOutlined color='secondary' /></IconButton>
         }
     ]
     return (
         <>
             <Typography variant="h3" component={'h3'} >Users</Typography>
             <Fab sx={{margin:2}} color="primary" variant="extended" ><AddOutlined/>New Users</Fab>
-            <MyDataTable pagedata={PageData&&PageData.pagedata} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumbers} page={PageData&&PageData.page} headers={headers} />
+            <MyDataTable onFetchData={(page,pagesize)=>getPageData(page,pagesize)} pagedata={PageData&&PageData.pagedata} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumbers} page={PageData&&PageData.page} headers={headers} />
         </>
     )
 }
