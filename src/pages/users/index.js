@@ -1,5 +1,5 @@
 import React from 'react'
-import { Fab, IconButton, Typography } from "@mui/material"
+import { Avatar, Fab, IconButton, Typography } from "@mui/material"
 import MyDataTable from '../../components/datagrid/MyDataTable'
 import { AddOutlined, BlockOutlined, CheckOutlined, DeleteOutlined } from "@mui/icons-material"
 import axios from 'axios'
@@ -22,6 +22,10 @@ const AdminUsersPage=props=>{
         })
     }
     const headers=[
+        {
+            title:"avatar",
+            component:row=><Avatar src={`${BACKEND_URL}/auth/avatars/${row.email}`} ></Avatar>
+        },
         {
             title:"Fullname",
             body:"fullname"

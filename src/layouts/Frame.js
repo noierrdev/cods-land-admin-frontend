@@ -119,9 +119,10 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/products/categories')?(
                         <Fab style={{width:"100%"}} variant='extended' >Categories</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/products/categories')} >
-                            <ListItemText style={{textAlign:"center"}} primary={`Categories`} />
-                        </ListItemButton>
+                        // <ListItemButton sx={{width:"100%"}} onClick={e=>navigate('/admin/products/categories')} >
+                        //     <ListItemText style={{textAlign:"center"}} primary={`Categories`} />
+                        // </ListItemButton>
+                        <Fab color='primary' style={{width:"100%"}} variant='extended' >Categories</Fab>
                     )}
                 </ListItem>
                 <ListItem disablePadding>
