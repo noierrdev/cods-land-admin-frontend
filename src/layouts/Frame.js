@@ -152,6 +152,15 @@ export default function FrameLayout(props) {
                         </ListItemButton>
                     )}
                 </ListItem>
+                <ListItem disablePadding>
+                    {pathname==('/admin/posts')?(
+                        <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Posts</Fab>
+                    ):(
+                        <ListItemButton onClick={e=>navigate('/admin/posts')} >
+                            <ListItemText style={{textAlign:"center"}} primary={`Posts`} />
+                        </ListItemButton>
+                    )}
+                </ListItem>
             </List>
         </Drawer>
         <Box

@@ -3,7 +3,7 @@ import MyDataTable from "../../components/datagrid/MyDataTable";
 import { Fab, Typography,Button,IconButton, Paper, MenuItem } from "@mui/material";
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
-import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined} from '@mui/icons-material'
+import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined} from '@mui/icons-material'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -25,6 +25,7 @@ const AdminProductsPage=props=>{
     const [AllCategories, setAllCategories]=React.useState(null);
     const [UploadFile,setUploadFile]=React.useState(false)
     const [ProductFile,setProductFile]=React.useState(null);
+    const [DeleteAll,setDeleteAll]=React.useState(false)
     const snackbar=useSnackbar();
     const refTitle=React.useRef(null);
     const refDescription=React.useRef(null);
@@ -74,7 +75,7 @@ const AdminProductsPage=props=>{
         myForm.append('image',ProductImage);
         axios.post(`${BACKEND_URL}/shop/products`,myForm,{
             headers:{
-                toekn:sessionStorage.getItem('token')
+                token:sessionStorage.getItem('token')
             }
         })
         .then(response=>{
@@ -147,7 +148,9 @@ const AdminProductsPage=props=>{
             <Typography variant="h3" component={`h3`} >Products</Typography>
             <div>
                 <Fab sx={{margin:1}} onClick={e=>setNewProduct(true)} variant="extended" color="primary" ><AddOutlined/>New Product</Fab>
-                <Fab sx={{margin:1}} onClick={e=>setUploadFile(true)} variant="extended" color="primary" ><CloudUploadOutlined/> Upload CSV</Fab>
+                <Fab sx={{margin:1}} onClick={e=>setUploadFile(true)} variant="extended" color="info" ><CloudUploadOutlined/> Upload CSV</Fab>
+                <Fab sx={{margin:1}} color="secondary" variant="extended" ><DeleteOutlined />&nbsp;Delete All</Fab>
+                <Fab sx={{margin:1}} color="success" variant="extended" ><DownloadOutlined />&nbsp;Download CSV</Fab>
             </div>
             <MyDataTable headers={headers} page={PageData&&PageData.page} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumbers} pagedata={PageData?PageData.pagedata:[]} onFetchData={(page,pagesize)=>getPageData(page,pagesize)} />
             <Dialog
@@ -217,7 +220,7 @@ const AdminProductsPage=props=>{
                         </>
                     )}
                 </Paper>
-                <input hidden onChange={e=>setProductImage(e.target.files[0])} type="file" ref={refImage} />
+                <input hidden accept="image/*" onChange={e=>setProductImage(e.target.files[0])} type="file" ref={refImage} />
                 </DialogContent>
                 <DialogActions>
                 <Button variant="outlined" onClick={e=>setNewProduct(false)}>Cancel</Button>
@@ -252,6 +255,7 @@ const AdminProductsPage=props=>{
                 </DialogActions>
             </Dialog>
             <Confirm open={DeleteProduct?true:false} onOk={()=>{deleteProduct(DeleteProduct)}} onCancel={e=>setDeleteProduct(null)} />
+            <Confirm open={DeleteAll} />
         </>
     )
 }

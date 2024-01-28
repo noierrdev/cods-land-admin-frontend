@@ -94,7 +94,7 @@ const AdminOrdersPage=props=>{
                                     return (
                                         <ListItem key={index} >
                                             <ListItemAvatar>
-                                                <img style={{width:"10vh"}} src={`${BACKEND_URL}/shop/products/${oneProduct.product._id}/image`} />
+                                                <img style={{width:"10vh"}} src={oneProduct.product.image_url?oneProduct.product.image_url:`${BACKEND_URL}/shop/products/${oneProduct.product._id}/image`} />
                                             </ListItemAvatar>
                                             <ListItemText sx={{marginLeft:2}} primary={oneProduct.product.title+" X "+oneProduct.count} secondary={
                                                 oneProduct.product.price+" X "+oneProduct.count+" = "+(Number(oneProduct.product.price)*Number(oneProduct.count)+" USD $")

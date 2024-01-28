@@ -76,6 +76,11 @@ const AdminProductCategoriesPage=props=>{
             tooltip:row=>row.description
         },
         {
+            title:"Category",
+            component:row=><div>{row.description&&row.description.length>40?row.description.slice(0,40)+"...":row.description}</div>,
+            tooltip:row=>row.description
+        },
+        {
             title:"Created",
             component:row=><Typography>{row.createdAt.slice(0,10)}</Typography>,
             tooltip:row=>row.description
