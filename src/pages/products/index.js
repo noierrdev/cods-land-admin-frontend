@@ -40,6 +40,10 @@ const AdminProductsPage=props=>{
     const getPageData=(page,pagesize)=>{
         axios.post(`${BACKEND_URL}/shop/products/page`,{
             page,pagesize
+        },{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
         })
         .then(response=>{
             if(response.data.status==="success"){

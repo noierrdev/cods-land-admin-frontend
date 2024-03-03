@@ -4,7 +4,7 @@ import MyDataTable from "../../components/datagrid/MyDataTable";
 import axios from 'axios'
 import { BACKEND_URL } from "../../AppConfigs";
 import { useSnackbar } from "notistack";
-import { DeleteOutlined } from "@mui/icons-material";
+import { BlockOutlined, DeleteOutlined } from "@mui/icons-material";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -62,6 +62,10 @@ const AdminOrdersPage=props=>{
         {
             title:"Ordered Date",
             component:row=><div onClick={e=>setShowOrder(row)} >{row.createdAt.slice(0,10)}</div>
+        },
+        {
+            tittle:"Accepted",
+            component:row=><><IconButton><BlockOutlined color="danger" /></IconButton></>
         },
         {
             title:"Status",
