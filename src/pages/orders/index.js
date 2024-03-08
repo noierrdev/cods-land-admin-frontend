@@ -4,7 +4,7 @@ import MyDataTable from "../../components/datagrid/MyDataTable";
 import axios from 'axios'
 import { BACKEND_URL } from "../../AppConfigs";
 import { useSnackbar } from "notistack";
-import { BlockOutlined, DeleteOutlined } from "@mui/icons-material";
+import { BlockOutlined, CheckOutlined, DeleteOutlined } from "@mui/icons-material";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -46,6 +46,21 @@ const AdminOrdersPage=props=>{
             }
         })
     }
+    const acceptOrder=(order_id)=>{
+        axios.put(`${BACKEND_URL}/shop/orders/accept`,{
+            order:order_id
+        },{
+            headers:{
+                token:sessionStorage.getItem('token')
+            } 
+        })
+        .then(response=>{
+            if(response.data.status==="success"){
+                snackbar.enqueueSnackbar("Accepted successfully",{variant:'success'})
+                getPageData(PageData.page,PageData.pagesize)
+            }
+        })
+    }
     const headers=[
         {
             title:"Buyer",
@@ -64,8 +79,8 @@ const AdminOrdersPage=props=>{
             component:row=><div onClick={e=>setShowOrder(row)} >{row.createdAt.slice(0,10)}</div>
         },
         {
-            tittle:"Accepted",
-            component:row=><><IconButton><BlockOutlined color="danger" /></IconButton></>
+            title:"Accepted",
+            component:row=><>{row.accepted==false?<IconButton onClick={e=>acceptOrder(row._id)} ><BlockOutlined color="secondary" /></IconButton>:<IconButton  ><CheckOutlined color="primary" /></IconButton>}</>
         },
         {
             title:"Status",
