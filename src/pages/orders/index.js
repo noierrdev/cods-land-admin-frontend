@@ -61,6 +61,9 @@ const AdminOrdersPage=props=>{
             }
         })
     }
+    const cancelOrder=(order_id)=>{
+
+    }
     const headers=[
         {
             title:"Buyer",
@@ -80,7 +83,7 @@ const AdminOrdersPage=props=>{
         },
         {
             title:"Accepted",
-            component:row=><>{row.accepted==false?<IconButton onClick={e=>acceptOrder(row._id)} ><BlockOutlined color="secondary" /></IconButton>:<IconButton  ><CheckOutlined color="primary" /></IconButton>}</>
+            component:row=><>{row.accepted==false?<IconButton onClick={e=>acceptOrder(row._id)} ><BlockOutlined color="secondary" /></IconButton>:<IconButton onClick={e=>cancelOrder(row._id)} ><CheckOutlined color="primary" /></IconButton>}</>
         },
         {
             title:"Status",
