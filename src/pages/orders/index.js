@@ -95,7 +95,7 @@ const AdminOrdersPage=props=>{
                             <Typography>Buyer: {ShowOrder.user.fullname} {ShowOrder.user.email}</Typography>
                             <List>
                                 {ShowOrder.products.map((oneProduct,index)=>{
-                                    return (
+                                    return oneProduct.product&&(
                                         <ListItem key={index} >
                                             <ListItemAvatar>
                                                 <img style={{width:"10vh"}} src={oneProduct.product.image_url?oneProduct.product.image_url:`${BACKEND_URL}/shop/products/${oneProduct.product._id}/image`} />
