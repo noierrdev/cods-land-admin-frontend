@@ -100,6 +100,9 @@ const AdminPostsPage=(props)=>{
                             <Typography>
                                 {ShowPost.description}
                             </Typography>
+                            {ShowPost.media&&(
+                                <img style={{width:'100%'}}  src={`${BACKEND_URL}/shared-contents/media/${ShowPost._id}`} />
+                            )}
                         </>
                     )}
                 </DialogContent>
