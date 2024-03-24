@@ -15,7 +15,7 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { TableHead, TextField } from '@mui/material';
+import { TableHead, TextField, Typography } from '@mui/material';
 import {styled} from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -98,7 +98,10 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
       <form onSubmit={e=>onChangeJump(e)} >
+        <div style={{display:"flex",alignItems:"center"}} >
+        <Typography>Jump to : </Typography>
         <TextField placeholder='Jump' inputRef={refJump} inputProps={{min:1,max:Math.max(0, Math.ceil(count / rowsPerPage) - 1)}}  defaultValue={page+1} type='number' variant='outlined' size='small' margin='normal' sx={{width:"5vw"}} />
+        </div>
       </form>
     </Box>
     
