@@ -70,7 +70,6 @@ const AdminProductsPage=props=>{
         if(!refDescription.current.value) return snackbar.enqueueSnackbar("Input Description!",{variant:"error"});
         if(!refPrice.current.value) return snackbar.enqueueSnackbar("Input Price!",{variant:"error"})
         if(!ProductImage) return snackbar.enqueueSnackbar("Select Product Image!",{variant:"error"})
-        console.log(refCategory.current.value);
         const myForm=new FormData();
         myForm.append('title',refTitle.current.value);
         myForm.append('description',refDescription.current.value);

@@ -51,6 +51,17 @@ const AppRoutes = (props)=>{
                     element:Loadable(React.lazy(()=>import('../pages/orders')))(props),
                     auth:true
                 },
+
+                {
+                    path:"posts",
+                    auth:true,
+                    element:Loadable(React.lazy(()=>import('../pages/posts')))(props),
+                },
+                {
+                    path:"posts/categories",
+                    auth:true,
+                    element:Loadable(React.lazy(()=>import('../pages/posts/categories')))(props),
+                },
             ]
         },
         {
