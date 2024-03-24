@@ -15,7 +15,7 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { TableHead } from '@mui/material';
+import { TableHead, TextField } from '@mui/material';
 import {styled} from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -43,7 +43,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
-
+  const refJump=React.useRef(null);
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
   };
@@ -60,8 +60,15 @@ function TablePaginationActions(props) {
     onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
+  const onChangeJump=e=>{
+    e.preventDefault();
+    if(!refJump.current.value) return;
+    onPageChange(e, Number(refJump.current.value)-1);
+    
+  }
+
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{ flexShrink: 0, ml: 2.5,display:"flex",alignItems:"center" }}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -90,7 +97,11 @@ function TablePaginationActions(props) {
       >
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
+      <form onSubmit={e=>onChangeJump(e)} >
+        <TextField placeholder='Jump' inputRef={refJump} inputProps={{min:1,max:Math.max(0, Math.ceil(count / rowsPerPage) - 1)}}  defaultValue={page+1} type='number' variant='outlined' size='small' margin='normal' sx={{width:"5vw"}} />
+      </form>
     </Box>
+    
   );
 }
 
@@ -171,16 +182,14 @@ export default function MyDataTable(props) {
               count={props.total?props.total:10}
               rowsPerPage={rowsPerPage}
               page={props.page?props.page:page}
-              SelectProps={{
-                inputProps: {
-                  'aria-label': 'rows per page',
-                },
-                native: true,
-              }}
+              
+              
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
-            />
+            >
+              
+            </TablePagination>
           </TableRow>
         </TableFooter>
       </Table>

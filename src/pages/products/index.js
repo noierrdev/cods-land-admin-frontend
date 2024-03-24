@@ -1,6 +1,6 @@
 import React from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
-import { Fab, Typography,Button,IconButton, Paper, MenuItem } from "@mui/material";
+import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider } from "@mui/material";
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
 import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined} from '@mui/icons-material'
@@ -25,7 +25,8 @@ const AdminProductsPage=props=>{
     const [AllCategories, setAllCategories]=React.useState(null);
     const [UploadFile,setUploadFile]=React.useState(false)
     const [ProductFile,setProductFile]=React.useState(null);
-    const [DeleteAll,setDeleteAll]=React.useState(false)
+    const [DeleteAll,setDeleteAll]=React.useState(false);
+    const [ShowProduct,setShowProduct]=React.useState(null);
     const snackbar=useSnackbar();
     const refTitle=React.useRef(null);
     const refDescription=React.useRef(null);
@@ -122,7 +123,7 @@ const AdminProductsPage=props=>{
         },
         {
             title:"Product Name",
-            body:"title",
+            component:row=><div onClick={e=>setShowProduct(row)} ><Typography>{row.title}</Typography></div>,
             tooltip:row=>row.description
         },
         {
@@ -229,6 +230,29 @@ const AdminProductsPage=props=>{
                 <Button variant="outlined" onClick={e=>setNewProduct(false)}>Cancel</Button>
                 <Button variant="contained" onClick={e=>saveProduct()}>Save</Button>
                 </DialogActions>
+            </Dialog>
+            <Dialog
+                open={ShowProduct?true:false}
+                onClose={e=>setShowProduct(null)}
+                fullWidth
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>Product Detail</DialogTitle>
+                {ShowProduct&&(
+                    <DialogContent>
+                        <Typography variant="h4" component={`h4`} >{ShowProduct.title}</Typography>
+                        <Divider/>
+                        <div style={{display:"flex"}} >
+                            <Typography variant="h5" component={`h5`} >{ShowProduct.price&&ShowProduct.price} USD $</Typography>
+                            <div style={{flexGrow:1}} ></div>
+                        </div>
+                        <Divider/>
+                        <div dangerouslySetInnerHTML={{__html:ShowProduct.description}} >
+
+                        </div>
+                    </DialogContent>
+                )}
             </Dialog>
             <Dialog
                 open={UploadFile}
