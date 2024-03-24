@@ -1,4 +1,4 @@
-import { Divider, IconButton, TextField, Typography ,Fab,Button} from "@mui/material";
+import { Divider, IconButton, TextField, Typography ,Fab,Button, Tooltip} from "@mui/material";
 import React from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
 import axios from 'axios'
@@ -71,11 +71,12 @@ const AdminPostsPage=(props)=>{
     const headers=[
         {
             title:"Title",
-            component:row=><div onClick={e=>setShowCategory(row)} ><Typography>{row.title}</Typography></div>
+            component:row=><Typography>{row.title}</Typography>,
+            tooltip:row=>row.description
         },
         {
             title:"Created",
-            component:row=><div onClick={e=>setShowCategory(row)} >{row.createdAt.slice(0,10)}</div>
+            component:row=><div  >{row.createdAt.slice(0,10)}</div>
         },
         {
             title:"Delete",
