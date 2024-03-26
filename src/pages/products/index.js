@@ -3,7 +3,7 @@ import MyDataTable from "../../components/datagrid/MyDataTable";
 import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider, FormControl, FormControlLabel,Checkbox, Grid } from "@mui/material";
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
-import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined, CheckOutlined, BlockOutlined} from '@mui/icons-material'
+import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined, CheckOutlined, BlockOutlined, EditOutlined, Edit} from '@mui/icons-material'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -22,11 +22,12 @@ const AdminProductsPage=props=>{
     const [NewProduct,setNewProduct]=React.useState(false);
     const [DeleteProduct,setDeleteProduct]=React.useState(null);
     const [ProductImage,setProductImage]=React.useState(null);
-    const [AllCategories, setAllCategories]=React.useState(null);
+    const [AllCategories, setAllCategories]=React.useState([]);
     const [UploadFile,setUploadFile]=React.useState(false)
     const [ProductFile,setProductFile]=React.useState(null);
     const [DeleteAll,setDeleteAll]=React.useState(false);
     const [ShowProduct,setShowProduct]=React.useState(null);
+    const [EditProduct,setEditProduct]=React.useState(null);
     const snackbar=useSnackbar();
     const refTitle=React.useRef(null);
     const refDescription=React.useRef(null);
@@ -86,7 +87,39 @@ const AdminProductsPage=props=>{
         .then(response=>{
             if(response.data.status==="success"){
                 snackbar.enqueueSnackbar("Updated Successfully",{variant:"success"})
-                setDeleteProduct(null);
+                // setDeleteProduct(null);
+                getPageData(PageData.page,PageData.pagesize)
+            }
+        })
+    }
+    const editProduct=(e)=>{
+        e.preventDefault()
+        const data={
+            title:e.target.elements['title'].value,
+            price:e.target.elements['price'].value,
+            category_1:e.target.elements['category_1'].value,
+            category_2:e.target.elements['category_2'].value,
+            category_3:e.target.elements['category_3'].value,
+            length:e.target.elements['length_'].value,
+            width:e.target.elements['width'].value,
+            height:e.target.elements['height'].value,
+            weight:e.target.elements['weight'].value,
+            public:e.target.elements['public'].checked,
+            description:e.target.elements['description'].value,
+        }
+        axios.put(`${BACKEND_URL}/shop/products`,{
+            id:EditProduct._id,
+            ...data
+
+        },{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
+        .then(response=>{
+            if(response.data.status==="success"){
+                snackbar.enqueueSnackbar("Updated Successfully",{variant:"success"})
+                setEditProduct(null);
                 getPageData(PageData.page,PageData.pagesize)
             }
         })
@@ -177,6 +210,10 @@ const AdminProductsPage=props=>{
         {
             title:"Created",
             component:row=><Typography>{row.createdAt&&row.createdAt.slice(0,10)}</Typography>
+        },
+        {
+            title:"Edit",
+            component:(row)=><IconButton size="small" onClick={e=>setEditProduct(row)} ><EditOutlined color="primary" /></IconButton>
         },
         {
             title:"Delete",
@@ -429,9 +466,175 @@ const AdminProductsPage=props=>{
                 <input hidden accept=".csv" onChange={e=>setProductFile(e.target.files[0])} type="file" ref={refCSV} />
                 </DialogContent>
                 <DialogActions>
-                <Button variant="outlined" onClick={e=>setNewProduct(false)}>Cancel</Button>
+                <Button variant="outlined" onClick={e=>setUploadFile(false)}>Cancel</Button>
                 <Button variant="contained" onClick={e=>uploadCSV()}>Save</Button>
                 </DialogActions>
+            </Dialog>
+            <Dialog
+                open={EditProduct?true:false}
+                onClose={e=>setEditProduct(null)}
+                fullWidth
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>Edit Product Detail</DialogTitle>
+                <form onSubmit={editProduct} >
+                <DialogContent>
+                    {EditProduct&&(
+                        <>
+                        <TextField
+                        variant="outlined"
+                        label="Title"
+                        defaultValue={EditProduct.title}
+                        fullWidth
+                        name="title"
+                        />
+                        {AllCategories&&(
+                            <>
+                            <TextField
+                                margin="normal"
+                                label="Product Category"
+                                fullWidth
+                                select
+                                variant="outlined"
+                                name="category_1"
+                                defaultValue={EditProduct.category_1?EditProduct.category_1._id:""}
+                            >
+                                <MenuItem  value={""} >
+                                    
+                                </MenuItem>
+                                {AllCategories&&AllCategories.map((oneCategory,index)=>{
+                                    return (
+                                        <MenuItem key={index} value={oneCategory._id} >
+                                            {oneCategory.title}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </TextField>
+                            <TextField
+                                margin="normal"
+                                label="Product Category"
+                                fullWidth
+                                select
+                                variant="outlined"
+                                name="category_2"
+                                defaultValue={EditProduct.category_2?EditProduct.category_2._id:""}
+                            >
+                                <MenuItem  value={""} >
+                                    
+                                </MenuItem>
+                                {AllCategories&&AllCategories.map((oneCategory,index)=>{
+                                    return (
+                                        <MenuItem key={index} value={oneCategory._id} >
+                                            {oneCategory.title}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </TextField>
+                            <TextField
+                                margin="normal"
+                                label="Product Category"
+                                fullWidth
+                                select
+                                variant="outlined"
+                                name="category_3"
+                                defaultValue={EditProduct.category_3?EditProduct.category_3._id:""}
+                            >
+                                <MenuItem  value={""} >
+                                    
+                                </MenuItem>
+                                {AllCategories&&AllCategories.map((oneCategory,index)=>{
+                                    return (
+                                        <MenuItem key={index} value={oneCategory._id} >
+                                            {oneCategory.title}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </TextField>
+                            </>
+                        )}
+                        <TextField
+                            label="Price"
+                            id="outlined-start-adornment"
+                            margin="normal"
+                            fullWidth
+                            type="number"
+                            name="price"
+                            defaultValue={EditProduct.price&&EditProduct.price}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">USD $</InputAdornment>,
+                            }}
+                        />
+                        <TextField
+                            label="Length"
+                            id="outlined-start-adornment"
+                            margin="normal"
+                            fullWidth
+                            type="number"
+                            name="length_"
+                            defaultValue={EditProduct.length&&EditProduct.length}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">in</InputAdornment>,
+                            }}
+                        />
+                        <TextField
+                            label="Width"
+                            id="outlined-start-adornment"
+                            margin="normal"
+                            fullWidth
+                            type="number"
+                            defaultValue={EditProduct.width&&EditProduct.width}
+                            name="width"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">in</InputAdornment>,
+                            }}
+                        />
+                        <TextField
+                            label="Height"
+                            id="outlined-start-adornment"
+                            margin="normal"
+                            fullWidth
+                            type="number"
+                            defaultValue={EditProduct.height&&EditProduct.height}
+                            name="height"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">in</InputAdornment>,
+                            }}
+                        />
+                        <TextField
+                            label="Weight"
+                            id="outlined-start-adornment"
+                            margin="normal"
+                            fullWidth
+                            type="number"
+                            defaultValue={EditProduct.weight&&EditProduct.weight}
+                            name="weight"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">lb</InputAdornment>,
+                            }}
+                        />
+                        <FormControl>
+                            <FormControlLabel control={<Checkbox name="public" checked={EditProduct.public?true:false} inputRef={refPublic} />} label={`Public`} />
+                        </FormControl>
+                        <TextField
+                            autoFocus
+                            margin="normal"
+                            label="Product Description"
+                            multiline
+                            defaultValue={EditProduct.description&&EditProduct.description}
+                            rows={10}
+                            fullWidth
+                            variant="outlined"
+                            name="description"
+                        />
+                        </>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="outlined" type="button" onClick={e=>setEditProduct(null)}>Cancel</Button>
+                    <Button variant="contained" type="submit" >Save</Button>
+                </DialogActions>
+                </form>
             </Dialog>
             <Confirm open={DeleteProduct?true:false} onOk={()=>{deleteProduct(DeleteProduct)}} onCancel={e=>setDeleteProduct(null)} />
             <Confirm open={DeleteAll} />
