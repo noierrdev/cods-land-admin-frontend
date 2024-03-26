@@ -45,7 +45,7 @@ const AdminProductsPage=props=>{
     const refCSV=React.useRef(null)
     const {search}=useLocation()
     const navigate=useNavigate()
-    // useAuth()
+    useAuth()
     
     const getPageData=(page,pagesize)=>{
         axios.post(`${BACKEND_URL}/shop/products/page`,{

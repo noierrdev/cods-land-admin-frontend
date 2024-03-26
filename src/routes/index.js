@@ -70,21 +70,21 @@ const AppRoutes = (props)=>{
         }
         
     ]
-    // React.useEffect(()=>{
-    //     axios.get(`${BACKEND_URL}/auth/verify`,{
-    //         headers:{
-    //             token:sessionStorage.getItem('token')
-    //         }
-    //     })
-    //     .then(response=>{
-    //         if(response.data.status=="success"){
-    //             dispatch(authSuccess(response.data.data))
-    //         }else{
-    //             const route=matchRoutes(routes,window.location)[matchRoutes(routes,window.location).length-1];
-    //             if(!route.route.auth) return <Redirect to="/" />
-    //         }
-    //     })
-    // },[])
+    React.useEffect(()=>{
+        axios.get(`${BACKEND_URL}/auth/verify`,{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
+        .then(response=>{
+            if(response.data.status=="success"){
+                dispatch(authSuccess(response.data.data))
+            }else{
+                const route=matchRoutes(routes,window.location)[matchRoutes(routes,window.location).length-1];
+                if(route.route.auth) return navigate("/")
+            }
+        })
+    },[])
     return useRoutes(routes);
 }
 const Redirect=props=>{

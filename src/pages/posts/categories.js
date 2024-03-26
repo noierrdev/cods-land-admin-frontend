@@ -16,6 +16,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Confirm from "../../components/general/Confirm";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 const AdminPostsPage=(props)=>{
     const [PageData,setPageData]=React.useState(null);
     const [DeleteCategory, setDeleteCategory]=React.useState(null);
@@ -25,6 +26,7 @@ const AdminPostsPage=(props)=>{
     const refTitle=React.useRef(null);
     const refDescription=React.useRef(null);
     const navigate=useNavigate();
+    useAuth()
     const getPageData=(page,pagesize)=>{
         axios.post(`${BACKEND_URL}/shared-contents/categories/page`,{page,pagesize},{
             headers:{

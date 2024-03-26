@@ -15,12 +15,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Confirm from "../../components/general/Confirm";
+import useAuth from "../../hooks/useAuth";
 
 const AdminOrdersPage=props=>{
     const [PageData,setPageData]=React.useState(null);
     const [DeleteOrder,setDeleteOrder]=React.useState(null);
     const [ShowOrder,setShowOrder]=React.useState(null);
     const snackbar=useSnackbar()
+    useAuth()
     const getPageData=(page,pagesize)=>{
         axios.post(`${BACKEND_URL}/shop/orders/page`,{page,pagesize},{
             headers:{

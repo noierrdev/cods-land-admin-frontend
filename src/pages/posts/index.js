@@ -16,6 +16,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Confirm from "../../components/general/Confirm";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const AdminPostsPage=(props)=>{
     const [PageData,setPageData]=React.useState(null);
@@ -23,6 +24,7 @@ const AdminPostsPage=(props)=>{
     const snackbar=useSnackbar();
     const navigate=useNavigate();
     const [ShowPost,setShowPost]=React.useState(null);
+    useAuth();
     const getPageData=(page,pagesize)=>{
         axios.post(`${BACKEND_URL}/shared-contents/page`,{page,pagesize},{
             headers:{
