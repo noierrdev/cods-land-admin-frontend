@@ -138,7 +138,7 @@ const AdminOrdersPage=props=>{
                                         <ListItemAvatar>
                                             <img style={{width:"10vh"}} src={ShowOrder.shipping_rate.provider_image_75} />
                                         </ListItemAvatar>
-                                        <ListItemText sx={{marginLeft:2}} primary={`Shipping Provider : ${ShowOrder.shipping_rate.provider}`} secondary={
+                                        <ListItemText sx={{marginLeft:2}} primary={`${ShowOrder.shipping_rate.provider} : ${ShowOrder.shipping_rate.servicelevel.display_name}`} secondary={
                                             ShowOrder.shipping_rate.amount+" USD $"
                                             } >
                                         </ListItemText>
