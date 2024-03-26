@@ -82,8 +82,12 @@ const AdminOrdersPage=props=>{
             component:row=><div onClick={e=>setShowOrder(row)} >{row.createdAt.slice(0,10)}</div>
         },
         {
+            title:"Shipping Rate",
+            component:row=><Typography>{row.shipping_rate&&row.shipping_rate.amount}</Typography>
+        },
+        {
             title:"Accepted",
-            component:row=><>{row.accepted==false?<IconButton onClick={e=>acceptOrder(row._id)} ><BlockOutlined color="secondary" /></IconButton>:<IconButton onClick={e=>cancelOrder(row._id)} ><CheckOutlined color="primary" /></IconButton>}</>
+            component:row=><>{!row.shipping_transaction?<IconButton onClick={e=>acceptOrder(row._id)} ><BlockOutlined color="secondary" /></IconButton>:<IconButton onClick={e=>cancelOrder(row._id)} ><CheckOutlined color="primary" /></IconButton>}</>
         },
         {
             title:"Status",

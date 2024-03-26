@@ -3,7 +3,7 @@ import MyDataTable from "../../components/datagrid/MyDataTable";
 import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider } from "@mui/material";
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
-import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined} from '@mui/icons-material'
+import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined, CheckOutlined, BlockOutlined} from '@mui/icons-material'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -32,11 +32,14 @@ const AdminProductsPage=props=>{
     const refDescription=React.useRef(null);
     const refPrice=React.useRef(null);
     const refCategory=React.useRef(null);
+    const refCategory_1=React.useRef(null);
+    const refCategory_2=React.useRef(null);
+    const refCategory_3=React.useRef(null);
     const refImage=React.useRef(null);
     const refCSV=React.useRef(null)
     const {search}=useLocation()
     const navigate=useNavigate()
-    useAuth()
+    // useAuth()
     
     const getPageData=(page,pagesize)=>{
         axios.post(`${BACKEND_URL}/shop/products/page`,{
@@ -74,7 +77,10 @@ const AdminProductsPage=props=>{
         const myForm=new FormData();
         myForm.append('title',refTitle.current.value);
         myForm.append('description',refDescription.current.value);
-        myForm.append('category',refCategory.current.value);
+        // myForm.append('category',refCategory.current.value);
+        myForm.append('category_1',refCategory_1&&refCategory_1.current.value);
+        myForm.append('category_2',refCategory_2&&refCategory_2.current.value);
+        myForm.append('category_3',refCategory_3&&refCategory_3.current.value);
         myForm.append('price',refPrice.current.value);
         myForm.append('image',ProductImage);
         axios.post(`${BACKEND_URL}/shop/products`,myForm,{
@@ -100,7 +106,7 @@ const AdminProductsPage=props=>{
             if(response.data.status==="success"){
                 setAllCategories(response.data.data)
             }
-        })
+        });
     },[])
     const uploadCSV=()=>{
         if(!ProductFile) return;
@@ -118,7 +124,7 @@ const AdminProductsPage=props=>{
     const headers=[
         {
             title:"Product Image",
-            component:(row)=>row.image_url?<img style={{width:"5vw"}} src={row.image_url} />:<img style={{width:"5vw"}} src={`${BACKEND_URL}/shop/products/${row._id}/image`} />,
+            component:(row)=>row.image_url?<img style={{width:"5vw"}} onClick={e=>setShowProduct(row)} src={row.image_url} />:<img style={{width:"5vw"}} onClick={e=>setShowProduct(row)} src={`${BACKEND_URL}/shop/products/${row._id}/image`} />,
             tooltip:row=>row.description
         },
         {
@@ -126,13 +132,17 @@ const AdminProductsPage=props=>{
             component:row=><div onClick={e=>setShowProduct(row)} ><Typography>{row.title}</Typography></div>,
             tooltip:row=>row.description
         },
-        {
-            title:"Category",
-            component:row=><Typography>{row.category&&row.category.title&&row.category.title}</Typography>
-        },
+        // {
+        //     title:"Category",
+        //     component:row=><Typography onClick={e=>setShowProduct(row)}>{row.category&&row.category.title&&row.category.title}</Typography>
+        // },
         {
             title:"Price",
-            component:row=><Typography>{row.price+" $"}</Typography>
+            component:row=><Typography>{row.price&&"$ "+(row.price.toLocaleString())}</Typography>
+        },
+        {
+            title:"Public",
+            component:row=>{return row.public?<IconButton><CheckOutlined color="primary" /></IconButton>:<IconButton><BlockOutlined color="secondary" /></IconButton>}
         },
         {
             title:"Count"
@@ -167,15 +177,19 @@ const AdminProductsPage=props=>{
                 <DialogTitle>New Product</DialogTitle>
                 <DialogContent>
                 {AllCategories&&(
+                    <>
                     <TextField
                         margin="normal"
                         label="Product Category"
                         fullWidth
                         select
-                        inputRef={refCategory}
+                        inputRef={refCategory_1}
                         variant="outlined"
-                        defaultValue={AllCategories&&AllCategories[0]&&AllCategories[0]._id}
+                        defaultValue={""}
                     >
+                        <MenuItem  value={""} >
+                            
+                        </MenuItem>
                         {AllCategories&&AllCategories.map((oneCategory,index)=>{
                             return (
                                 <MenuItem key={index} value={oneCategory._id} >
@@ -184,6 +198,47 @@ const AdminProductsPage=props=>{
                             )
                         })}
                     </TextField>
+                    <TextField
+                        margin="normal"
+                        label="Product Category"
+                        fullWidth
+                        select
+                        inputRef={refCategory_2}
+                        variant="outlined"
+                        defaultValue={""}
+                    >
+                        <MenuItem  value={""} >
+                            
+                        </MenuItem>
+                        {AllCategories&&AllCategories.map((oneCategory,index)=>{
+                            return (
+                                <MenuItem key={index} value={oneCategory._id} >
+                                    {oneCategory.title}
+                                </MenuItem>
+                            )
+                        })}
+                    </TextField>
+                    <TextField
+                        margin="normal"
+                        label="Product Category"
+                        fullWidth
+                        select
+                        inputRef={refCategory_3}
+                        variant="outlined"
+                        defaultValue={""}
+                    >
+                        <MenuItem  value={""} >
+                            
+                        </MenuItem>
+                        {AllCategories&&AllCategories.map((oneCategory,index)=>{
+                            return (
+                                <MenuItem key={index} value={oneCategory._id} >
+                                    {oneCategory.title}
+                                </MenuItem>
+                            )
+                        })}
+                    </TextField>
+                    </>
                 )}
                 <TextField
                     autoFocus
