@@ -1,6 +1,6 @@
 import React from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
-import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider, FormControl, FormControlLabel,Checkbox } from "@mui/material";
+import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider, FormControl, FormControlLabel,Checkbox, Grid } from "@mui/material";
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
 import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined, CheckOutlined, BlockOutlined} from '@mui/icons-material'
@@ -69,6 +69,23 @@ const AdminProductsPage=props=>{
         .then(response=>{
             if(response.data.status==="success"){
                 snackbar.enqueueSnackbar("Deleted Successfully",{variant:"success"})
+                setDeleteProduct(null);
+                getPageData(PageData.page,PageData.pagesize)
+            }
+        })
+    }
+    const switchPublic=(product_id,value)=>{
+        axios.put(`${BACKEND_URL}/shop/products`,{
+            id:product_id,
+            public:value==true?false:true
+        },{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
+        .then(response=>{
+            if(response.data.status==="success"){
+                snackbar.enqueueSnackbar("Updated Successfully",{variant:"success"})
                 setDeleteProduct(null);
                 getPageData(PageData.page,PageData.pagesize)
             }
@@ -146,17 +163,13 @@ const AdminProductsPage=props=>{
             component:row=><div onClick={e=>setShowProduct(row)} ><Typography>{row.title}</Typography></div>,
             tooltip:row=>row.description
         },
-        // {
-        //     title:"Category",
-        //     component:row=><Typography onClick={e=>setShowProduct(row)}>{row.category&&row.category.title&&row.category.title}</Typography>
-        // },
         {
             title:"Price",
             component:row=><Typography>{row.price&&"$ "+(row.price.toFixed(2).toLocaleString('en-US'))}</Typography>
         },
         {
             title:"Public",
-            component:row=>{return row.public?<IconButton><CheckOutlined color="primary" /></IconButton>:<IconButton><BlockOutlined color="secondary" /></IconButton>}
+            component:row=>{return <IconButton onClick={e=>switchPublic(row._id,row.public)} >{row.public?<CheckOutlined color="primary" />:<BlockOutlined color="secondary" />}</IconButton>}
         },
         {
             title:"Count"
@@ -188,7 +201,7 @@ const AdminProductsPage=props=>{
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle>New Product</DialogTitle>
+                <DialogTitle>Product Detail Edit</DialogTitle>
                 <DialogContent>
                 <TextField
                     autoFocus
@@ -360,16 +373,33 @@ const AdminProductsPage=props=>{
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle>Product Detail</DialogTitle>
+                <DialogTitle></DialogTitle>
                 {ShowProduct&&(
                     <DialogContent>
-                        <Typography variant="h4" component={`h4`} >{ShowProduct.title}</Typography>
+                        <Typography align="center" variant="h4" component={`h4`} >{ShowProduct.title}</Typography>
+                        <div style={{display:"flex",justifyContent:"center"}} ><img style={{width:"40%"}} src={ShowProduct.image_url?ShowProduct.image_url:`${BACKEND_URL}/shop/products/${ShowProduct._id}/image`} /></div>
+                        <Divider/>
+                        <Grid container alignItems={`center`} justifyContent={`center`} >
+                            <Grid item xs={8}>
+                                <Typography>{ShowProduct.public?"Store : Public":"Store : Private"}</Typography>
+                                <Typography>{ShowProduct.category_1&&"Category 1 : "+ShowProduct.category_1.title}</Typography>
+                                <Typography>{ShowProduct.category_2&&"Category 2 : "+ShowProduct.category_2.title}</Typography>
+                                <Typography>{ShowProduct.category_3&&"Category 3 : "+ShowProduct.category_3.title}</Typography>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Typography>{ShowProduct.length&&"Length : "+ShowProduct.length+" in"}</Typography>
+                                <Typography>{ShowProduct.width&&"Width : "+ShowProduct.width+" in"}</Typography>
+                                <Typography>{ShowProduct.height&&"Height : "+ShowProduct.height+" in"}</Typography>
+                                <Typography>{ShowProduct.weight&&"Weight : "+ShowProduct.height+" lb"}</Typography>
+                            </Grid>
+                        </Grid>
                         <Divider/>
                         <div style={{display:"flex"}} >
-                            <Typography variant="h5" component={`h5`} >{ShowProduct.price&&ShowProduct.price} USD $</Typography>
+                            <Typography >{ShowProduct.price&&"Price : "+ShowProduct.price} USD $</Typography>
                             <div style={{flexGrow:1}} ></div>
                         </div>
                         <Divider/>
+                        <Typography>Description : </Typography>
                         <div dangerouslySetInnerHTML={{__html:ShowProduct.description}} >
 
                         </div>
