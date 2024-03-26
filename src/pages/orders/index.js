@@ -60,6 +60,8 @@ const AdminOrdersPage=props=>{
             if(response.data.status==="success"){
                 snackbar.enqueueSnackbar("Accepted successfully",{variant:'success'})
                 getPageData(PageData.page,PageData.pagesize)
+            }else{
+                snackbar.enqueueSnackbar("Shipping request failed, Please try again",{variant:"error"})
             }
         })
     }
