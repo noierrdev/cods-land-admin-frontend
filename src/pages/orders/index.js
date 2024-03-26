@@ -139,7 +139,7 @@ const AdminOrdersPage=props=>{
                                             <img style={{width:"10vh"}} src={ShowOrder.shipping_rate.provider_image_75} />
                                         </ListItemAvatar>
                                         <ListItemText sx={{marginLeft:2}} primary={`${ShowOrder.shipping_rate.provider} : ${ShowOrder.shipping_rate.servicelevel.display_name}`} secondary={
-                                            ShowOrder.shipping_rate.amount+" USD $"
+                                            Number(ShowOrder.shipping_rate.amount).toFixed(2)+" USD $"
                                             } >
                                         </ListItemText>
                                     </ListItem>
@@ -148,7 +148,7 @@ const AdminOrdersPage=props=>{
                         </>
                     )}
                     <Divider/>
-                    <Typography component={`h3`} variant="h3" >Total: {Number(ShowOrder&&ShowOrder.price)+Number(ShowOrder&&ShowOrder.shipping_rate&&ShowOrder.shipping_rate.amount)} USD $</Typography>
+                    <Typography component={`h3`} variant="h3" >Total: {(Number(ShowOrder&&ShowOrder.price)+Number(ShowOrder&&ShowOrder.shipping_rate&&ShowOrder.shipping_rate.amount)).toFixed(2)} USD $</Typography>
                     <Typography component={`h5`} variant="h5">{ShowOrder&&ShowOrder.createdAt.slice(0,10)}</Typography>
                 </DialogContent>
                 <DialogActions>
