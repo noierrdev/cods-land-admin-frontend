@@ -1,6 +1,6 @@
 import React from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
-import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider } from "@mui/material";
+import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider, FormControl, FormControlLabel,Checkbox } from "@mui/material";
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
 import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined, CheckOutlined, BlockOutlined} from '@mui/icons-material'
@@ -35,6 +35,10 @@ const AdminProductsPage=props=>{
     const refCategory_1=React.useRef(null);
     const refCategory_2=React.useRef(null);
     const refCategory_3=React.useRef(null);
+    const refLength=React.useRef(null);
+    const refWidth=React.useRef(null);
+    const refHeight=React.useRef(null);
+    const refWeight=React.useRef(null);
     const refImage=React.useRef(null);
     const refCSV=React.useRef(null)
     const {search}=useLocation()
@@ -249,16 +253,6 @@ const AdminProductsPage=props=>{
                     inputRef={refTitle}
                 />
                 <TextField
-                    autoFocus
-                    margin="normal"
-                    label="Product Description"
-                    multiline
-                    inputRef={refDescription}
-                    rows={10}
-                    fullWidth
-                    variant="outlined"
-                />
-                <TextField
                     label="Price"
                     id="outlined-start-adornment"
                     margin="normal"
@@ -269,6 +263,68 @@ const AdminProductsPage=props=>{
                         startAdornment: <InputAdornment position="start">USD $</InputAdornment>,
                     }}
                 />
+                <TextField
+                    label="Length"
+                    id="outlined-start-adornment"
+                    margin="normal"
+                    fullWidth
+                    type="number"
+                    inputRef={refLength}
+                    defaultValue={10}
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">in</InputAdornment>,
+                    }}
+                />
+                <TextField
+                    label="Width"
+                    id="outlined-start-adornment"
+                    margin="normal"
+                    fullWidth
+                    type="number"
+                    inputRef={refWidth}
+                    defaultValue={10}
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">in</InputAdornment>,
+                    }}
+                />
+                <TextField
+                    label="Height"
+                    id="outlined-start-adornment"
+                    margin="normal"
+                    fullWidth
+                    type="number"
+                    inputRef={refHeight}
+                    defaultValue={10}
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">in</InputAdornment>,
+                    }}
+                />
+                <TextField
+                    label="Weight"
+                    id="outlined-start-adornment"
+                    margin="normal"
+                    fullWidth
+                    type="number"
+                    inputRef={refWeight}
+                    defaultValue={2}
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">lb</InputAdornment>,
+                    }}
+                />
+                <FormControl>
+                    <FormControlLabel control={<Checkbox/>} label={`Public`} />
+                </FormControl>
+                <TextField
+                    autoFocus
+                    margin="normal"
+                    label="Product Description"
+                    multiline
+                    inputRef={refDescription}
+                    rows={10}
+                    fullWidth
+                    variant="outlined"
+                />
+                
                 <Paper onClick={e=>refImage.current.click()} elevation={8}  sx={{padding:5,textAlign:"center"}} >
                     {ProductImage?(
                         <img style={{width:"80%"}} src={window.URL.createObjectURL(ProductImage)} />
