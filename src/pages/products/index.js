@@ -31,6 +31,7 @@ const AdminProductsPage=props=>{
     const refTitle=React.useRef(null);
     const refDescription=React.useRef(null);
     const refPrice=React.useRef(null);
+    const refPublic=React.useRef(null);
     const refCategory=React.useRef(null);
     const refCategory_1=React.useRef(null);
     const refCategory_2=React.useRef(null);
@@ -86,6 +87,11 @@ const AdminProductsPage=props=>{
         myForm.append('category_2',refCategory_2&&refCategory_2.current.value);
         myForm.append('category_3',refCategory_3&&refCategory_3.current.value);
         myForm.append('price',refPrice.current.value);
+        myForm.append('length',refLength.current.value);
+        myForm.append('width',refWidth.current.value);
+        myForm.append('height',refHeight.current.value);
+        myForm.append('weight',refWeight.current.value);
+        myForm.append('public',refPublic.current.checked);
         myForm.append('image',ProductImage);
         axios.post(`${BACKEND_URL}/shop/products`,myForm,{
             headers:{
@@ -98,6 +104,10 @@ const AdminProductsPage=props=>{
                 refTitle.current.value="";
                 refDescription.current.value="";
                 refPrice.current.value="";
+                refWidth.current.value="";
+                refLength.current.value="";
+                refHeight.current.value="";
+                refWeight.current.value="";
                 setProductImage(null)
                 getPageData(PageData.page,PageData.pagesize);
                 snackbar.enqueueSnackbar("Saved successfully",{variant:"success"})
@@ -142,7 +152,7 @@ const AdminProductsPage=props=>{
         // },
         {
             title:"Price",
-            component:row=><Typography>{row.price&&"$ "+(row.price.toLocaleString())}</Typography>
+            component:row=><Typography>{row.price&&"$ "+(row.price.toFixed(2).toLocaleString('en-US'))}</Typography>
         },
         {
             title:"Public",
@@ -180,6 +190,14 @@ const AdminProductsPage=props=>{
             >
                 <DialogTitle>New Product</DialogTitle>
                 <DialogContent>
+                <TextField
+                    autoFocus
+                    margin="normal"
+                    label="Product Name"
+                    fullWidth
+                    variant="outlined"
+                    inputRef={refTitle}
+                />
                 {AllCategories&&(
                     <>
                     <TextField
@@ -244,14 +262,7 @@ const AdminProductsPage=props=>{
                     </TextField>
                     </>
                 )}
-                <TextField
-                    autoFocus
-                    margin="normal"
-                    label="Product Name"
-                    fullWidth
-                    variant="outlined"
-                    inputRef={refTitle}
-                />
+                
                 <TextField
                     label="Price"
                     id="outlined-start-adornment"
@@ -312,7 +323,7 @@ const AdminProductsPage=props=>{
                     }}
                 />
                 <FormControl>
-                    <FormControlLabel control={<Checkbox/>} label={`Public`} />
+                    <FormControlLabel control={<Checkbox onChange={e=>console.log(refPublic.current.checked)} inputRef={refPublic} />} label={`Public`} />
                 </FormControl>
                 <TextField
                     autoFocus
