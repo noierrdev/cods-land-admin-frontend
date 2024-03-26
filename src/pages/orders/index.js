@@ -4,7 +4,7 @@ import MyDataTable from "../../components/datagrid/MyDataTable";
 import axios from 'axios'
 import { BACKEND_URL } from "../../AppConfigs";
 import { useSnackbar } from "notistack";
-import { BlockOutlined, CheckOutlined, DeleteOutlined } from "@mui/icons-material";
+import { BlockOutlined, BookOutlined, CheckOutlined, DeleteOutlined } from "@mui/icons-material";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -93,7 +93,7 @@ const AdminOrdersPage=props=>{
         },
         {
             title:"Status",
-            component:row=><div onClick={e=>setShowOrder(row)} >{row.status?row.status:""}</div>
+            component:row=><div  >{row.shipping_transaction&&<a target="_blank" href={row.shipping_transaction&&row.shipping_transaction.label_url} ><IconButton><BookOutlined color="primary" /></IconButton></a>}</div>
         },
         {
             title:"Delete",
@@ -131,11 +131,22 @@ const AdminOrdersPage=props=>{
                                         </ListItem>
                                     )
                                 })}
+                                {ShowOrder.shipping_rate&&(
+                                    <ListItem  >
+                                        <ListItemAvatar>
+                                            <img style={{width:"10vh"}} src={ShowOrder.shipping_rate.provider_image_75} />
+                                        </ListItemAvatar>
+                                        <ListItemText sx={{marginLeft:2}} primary={`Shipping Provider : ${ShowOrder.shipping_rate.provider}`} secondary={
+                                            ShowOrder.shipping_rate.amount+" USD $"
+                                            } >
+                                        </ListItemText>
+                                    </ListItem>
+                                )}
                             </List>
                         </>
                     )}
                     <Divider/>
-                    <Typography component={`h3`} variant="h3" >Total: {ShowOrder&&ShowOrder.price} USD $</Typography>
+                    <Typography component={`h3`} variant="h3" >Total: {Number(ShowOrder&&ShowOrder.price)+Number(ShowOrder&&ShowOrder.shipping_rate&&ShowOrder.shipping_rate.amount)} USD $</Typography>
                     <Typography component={`h5`} variant="h5">{ShowOrder&&ShowOrder.createdAt.slice(0,10)}</Typography>
                 </DialogContent>
                 <DialogActions>
