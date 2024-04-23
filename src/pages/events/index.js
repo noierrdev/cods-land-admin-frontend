@@ -176,7 +176,10 @@ const AdminEventsPage=(props)=>{
                     {ShowEvent&&(
                         <>
                         <Typography align="center" variant="h3" component={'h3'} >{ShowEvent.title}</Typography>
-                        <img style={{width:"100%"}} src={`${BACKEND_URL}/events/${ShowEvent._id}/logo`}  />
+                        <div style={{display:'flex',justifyContent:'center'}} >
+                        <img style={{width:"40%"}} src={`${BACKEND_URL}/events/${ShowEvent._id}/logo`}  />
+                        </div>
+                        
                         <Typography>{ShowEvent.description}</Typography>
                         <List>
                             {ShowEvent.users.map((user,index)=>{
