@@ -1,4 +1,4 @@
-import { Divider, IconButton, TextField, Typography ,Fab,Button, Tooltip,Paper} from "@mui/material";
+import { Divider, IconButton, TextField, Typography ,Fab,Button, Tooltip,Paper, Grid,Avatar} from "@mui/material";
 import React from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
 import axios from 'axios'
@@ -26,6 +26,8 @@ const AdminEventsPage=(props)=>{
     const refTitle=React.useRef(null);
     const refDescription=React.useRef(null);
     const refImage=React.useRef(null);
+    const refStart=React.useRef(null);
+    const refEnd=React.useRef(null);
     const [LogoImage,setLogoImage]=React.useState(null);
     const navigate=useNavigate();
     useAuth()
@@ -46,6 +48,8 @@ const AdminEventsPage=(props)=>{
         if(!refTitle.current.value) return snackbar.enqueueSnackbar("Input Title!",{variant:"error"})
         const myForm=new FormData();
         myForm.append('title',refTitle.current.value);
+        myForm.append('start',refStart.current.value);
+        myForm.append('end',refEnd.current.value);
         myForm.append('description',refDescription.current.value);
         myForm.append("logo",LogoImage);
         axios.post(`${BACKEND_URL}/events/`,myForm,{
@@ -56,7 +60,8 @@ const AdminEventsPage=(props)=>{
         .then(response=>{
             if(response.data.status==="success"){
                 setEditEvent(false);
-                getPageData(PageData.page,PageData.pagesize)
+                setLogoImage(null)
+                getPageData(PageData.page,PageData.pagesize);
             }
         })
     }
@@ -75,9 +80,25 @@ const AdminEventsPage=(props)=>{
     }
     const headers=[
         {
+            title:"Logo",
+            component:row=><Avatar onClick={e=>setShowEvent(row)} src={`${BACKEND_URL}/events/${row._id}/logo`} ></Avatar>,
+        },
+        {
             title:"Title",
-            component:row=><Typography>{row.title}</Typography>,
+            component:row=><div onClick={e=>setShowEvent(row)} style={{width:"100%"}} ><Typography>{row.title}</Typography></div>,
             tooltip:row=>row.description
+        },
+        {
+            title:"From",
+            component:row=><div  >{row.start&&row.start.slice(0,10)}</div>
+        },
+        {
+            title:"To",
+            component:row=><div  >{row.end&&row.end.slice(0,10)}</div>
+        },
+        {
+            title:"Participants",
+            component:row=><div  >{row.users.length}</div>
         },
         {
             title:"Created",
@@ -113,10 +134,19 @@ const AdminEventsPage=(props)=>{
                     variant="outlined"
                     label="Description"
                     fullWidth
-                    margin="normal"
                     multiline
+                    rows={10}
+                    margin="normal"
                     inputRef={refDescription}
                     />
+                    <Grid container spacing={1} >
+                        <Grid item xs={6} >
+                            <TextField fullWidth label="From" focused inputRef={refStart} variant="outlined" size="small" margin="normal" inputProps={{type:"date"}} />
+                        </Grid>
+                        <Grid item xs={6} >
+                            <TextField fullWidth label="To" focused inputRef={refEnd} variant="outlined" size="small" margin="normal" inputProps={{type:"date"}} />
+                        </Grid>
+                    </Grid>
                     <Paper onClick={e=>refImage.current.click()} elevation={8}  sx={{padding:5,textAlign:"center"}} >
                         {LogoImage?(
                             <img style={{width:"80%"}} src={window.URL.createObjectURL(LogoImage)} />
@@ -132,6 +162,40 @@ const AdminEventsPage=(props)=>{
                 <DialogActions>
                 <Button variant="outlined" onClick={e=>setEditEvent(false)}>Cancel</Button>
                 <Button variant="contained" onClick={e=>saveEvent()}>Save</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={ShowEvent?true:false}
+                onClose={e=>setShowEvent(null)}
+                fullWidth
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>Event Detail</DialogTitle>
+                <DialogContent>
+                    {ShowEvent&&(
+                        <>
+                        <Typography align="center" variant="h3" component={'h3'} >{ShowEvent.title}</Typography>
+                        <img style={{width:"100%"}} src={`${BACKEND_URL}/events/${ShowEvent._id}/logo`}  />
+                        <Typography>{ShowEvent.description}</Typography>
+                        <List>
+                            {ShowEvent.users.map((user,index)=>{
+                                return (
+                                    <ListItem>
+                                        <ListItemAvatar >
+                                            <Avatar src={`${BACKEND_URL}/auth/avatars/${user.email}`} />
+                                        </ListItemAvatar>
+                                        <ListItemText primary={user.fullname} secondary={user.email} ></ListItemText>
+                                    </ListItem>
+                                )
+                            })}
+                        </List>
+                        
+                        </>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="outlined" onClick={e=>setShowEvent(null)}>Cancel</Button>
                 </DialogActions>
             </Dialog>
             <Confirm open={DeleteEvent?true:false} onOk={e=>deleteEvent(DeleteEvent)} onCancel={e=>setDeleteEvent(null)} />
