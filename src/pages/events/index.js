@@ -112,7 +112,7 @@ const AdminEventsPage=(props)=>{
     return (
         <>
             <Typography variant="h3" component={`h3`} >Events</Typography>
-            <Fab sx={{margin:1}} onClick={e=>setEditEvent(true)} variant="extended" color="info" ><AddOutlined/>Add Event</Fab>
+            <Fab sx={{margin:1}} onClick={e=>setEditEvent(true)} variant="extended" color="primary" ><AddOutlined/>Add Event</Fab>
             <MyDataTable pagedata={PageData&&PageData.pagedata} page={PageData&&PageData.page} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumber} onFetchData={(page,pagesize)=>getPageData(page,pagesize)} headers={headers} />
             <Dialog
                 open={EditEvent}
