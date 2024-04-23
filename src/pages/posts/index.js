@@ -1,4 +1,4 @@
-import { Divider, IconButton, Typography,Fab } from "@mui/material";
+import { Divider, IconButton, Typography,Fab, TextField } from "@mui/material";
 import React from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
 import axios from 'axios'
@@ -24,9 +24,10 @@ const AdminPostsPage=(props)=>{
     const snackbar=useSnackbar();
     const navigate=useNavigate();
     const [ShowPost,setShowPost]=React.useState(null);
+    const refSearch=React.useRef();
     useAuth();
     const getPageData=(page,pagesize)=>{
-        axios.post(`${BACKEND_URL}/shared-contents/page`,{page,pagesize},{
+        axios.post(`${BACKEND_URL}/shared-contents/page`,{page,pagesize,search:refSearch.current.value},{
             headers:{
                 token:sessionStorage.getItem('token')
             }
@@ -36,6 +37,9 @@ const AdminPostsPage=(props)=>{
                 setPageData(response.data.data)
             }
         })
+    }
+    const handleSearchInput=(e)=>{
+        getPageData(PageData.page,PageData.pagesize);
     }
     const deletePost=(order_id)=>{
         axios.delete(`${BACKEND_URL}/shared-contents/${order_id}`,{
@@ -78,6 +82,7 @@ const AdminPostsPage=(props)=>{
             <div>
                 <Fab sx={{margin:1}} onClick={e=>navigate("/admin/posts/categories")} variant="extended" color="primary" ><CategoryOutlined/>Categories</Fab>
             </div>
+            <TextField onChange={handleSearchInput} size="small" margin="normal" variant="outlined" fullWidth placeholder="Search" inputRef={refSearch} />
             <MyDataTable pagedata={PageData&&PageData.pagedata} page={PageData&&PageData.page} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumber} onFetchData={(page,pagesize)=>getPageData(page,pagesize)} headers={headers} />
             <Dialog
                 open={ShowPost?true:false}

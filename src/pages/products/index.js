@@ -43,13 +43,14 @@ const AdminProductsPage=props=>{
     const refWeight=React.useRef(null);
     const refImage=React.useRef(null);
     const refCSV=React.useRef(null)
+    const refSearch=React.useRef(null);
     const {search}=useLocation()
     const navigate=useNavigate()
     useAuth()
     
     const getPageData=(page,pagesize)=>{
         axios.post(`${BACKEND_URL}/shop/products/page`,{
-            page,pagesize
+            page,pagesize,search:refSearch.current.value
         },{
             headers:{
                 token:sessionStorage.getItem('token')
@@ -60,6 +61,9 @@ const AdminProductsPage=props=>{
                 setPageData(response.data.data)
             }
         })
+    }
+    const handleInputSearch=(e)=>{
+        getPageData(PageData.page,PageData.pagesize);
     }
     const deleteProduct=(product_id)=>{
         axios.delete(`${BACKEND_URL}/shop/products/${product_id}`,{
@@ -230,6 +234,7 @@ const AdminProductsPage=props=>{
                 <Fab sx={{margin:1}} color="secondary" variant="extended" ><DeleteOutlined />&nbsp;Delete All</Fab>
                 {/* <Fab sx={{margin:1}} color="success" variant="extended" ><DownloadOutlined />&nbsp;Download CSV</Fab> */}
             </div>
+            <TextField onChange={handleInputSearch} fullWidth variant="outlined" placeholder="Search" margin="normal" size="small" inputRef={refSearch} />
             <MyDataTable headers={headers} page={PageData&&PageData.page} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumbers} pagedata={PageData?PageData.pagedata:[]} onFetchData={(page,pagesize)=>getPageData(page,pagesize)} />
             <Dialog
                 open={NewProduct}
