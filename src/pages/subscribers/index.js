@@ -24,10 +24,11 @@ const AdminSubscribersPage=props=>{
     const navigate=useNavigate();
     const refFullname=React.useRef(null);
     const refEmail=React.useRef(null);
+    const refSearch=React.useRef(null);
 
     const getPageData=(page,pagesize)=>{
         axios.post(`${BACKEND_URL}/subscribers/page`,{
-            page,pagesize
+            page,pagesize,search:refSearch.current.value
         },{
             headers:{
                 token:sessionStorage.getItem('token')
@@ -38,6 +39,9 @@ const AdminSubscribersPage=props=>{
                 setPageData(response.data.data)
             }
         })
+    }
+    const handleInputSearch=e=>{
+        getPageData(PageData.page,PageData.pagesize)
     }
     const headers=[
         {
@@ -128,6 +132,7 @@ const AdminSubscribersPage=props=>{
                 <Fab sx={{margin:1}} onClick={e=>setUploadModal(true)} variant="extended" color="success" ><DownloadOutlined/>Download CSV</Fab>
                 <Fab sx={{margin:1}} onClick={e=>setDeleteAllModal(true)} variant="extended" color="secondary" ><DeleteOutlined/>Delete All</Fab>
             </div>
+            <TextField placeholder='search' fullWidth margin='normal' size='small' inputRef={refSearch} onChange={handleInputSearch} />
             <MyDataTable onFetchData={(page,pagesize)=>getPageData(page,pagesize)} pagedata={PageData&&PageData.pagedata} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumbers} page={PageData&&PageData.page} headers={headers} />
             <Confirm open={DeleteSubscriber?true:false} onOk={e=>deleteSubscriber()} onCancel={e=>setDeleteSubscriber(null)} />
             <Dialog
