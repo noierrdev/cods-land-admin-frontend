@@ -5,7 +5,7 @@ import {
     TextField
 } from "@mui/material"
 import MyDataTable from '../../components/datagrid/MyDataTable'
-import { AddOutlined,TableChartOutlined, BlockOutlined, CheckOutlined, DeleteOutlined, CategoryOutlined, UploadOutlined, PlusOneOutlined, Delete, DownloadOutlined } from "@mui/icons-material"
+import { AddOutlined,TableChartOutlined, BlockOutlined, CheckOutlined, DeleteOutlined, CategoryOutlined, UploadOutlined, PlusOneOutlined, Delete, DownloadOutlined, MailOutlined } from "@mui/icons-material"
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
 import Confirm from '../../components/general/Confirm'
@@ -55,6 +55,10 @@ const AdminSubscribersPage=props=>{
         {
             title:"Email",
             body:"email"
+        },
+        {
+            title:"Send Private mail",
+            component:row=><IconButton onClick={e=>{}} ><MailOutlined color='primary' /></IconButton>
         },
         {
             title:"Delete",
