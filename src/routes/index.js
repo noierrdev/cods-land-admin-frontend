@@ -72,6 +72,11 @@ const AppRoutes = (props)=>{
                     auth:true,
                     element:Loadable(React.lazy(()=>import('../pages/events')))(props),
                 },
+                {
+                    path:"subscribers",
+                    auth:true,
+                    element:Loadable(React.lazy(()=>import('../pages/subscribers')))(props),
+                },
             ]
         },
         {

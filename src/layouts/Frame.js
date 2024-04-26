@@ -179,6 +179,24 @@ export default function FrameLayout(props) {
                         </ListItemButton>
                     )}
                 </ListItem>
+                <ListItem disablePadding>
+                    {pathname==('/admin/subscribers')?(
+                        <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Subscribers</Fab>
+                    ):(
+                        <ListItemButton onClick={e=>navigate('/admin/subscribers')} >
+                            <ListItemText style={{textAlign:"center"}} primary={`Subscribers`} />
+                        </ListItemButton>
+                    )}
+                </ListItem>
+                {/* <ListItem disablePadding>
+                    {pathname==('/admin/newsletters')?(
+                        <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Newsletters</Fab>
+                    ):(
+                        <ListItemButton onClick={e=>navigate('/admin/newsletters')} >
+                            <ListItemText style={{textAlign:"center"}} primary={`Newsletters`} />
+                        </ListItemButton>
+                    )}
+                </ListItem> */}
                 {/* <ListItem disablePadding>
                     {pathname==('/admin/posts/categories')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Post Categories</Fab>
