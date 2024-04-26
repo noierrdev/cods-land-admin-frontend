@@ -4,7 +4,7 @@ import {
     Dialog, DialogTitle, DialogContent, DialogActions
 } from "@mui/material"
 import MyDataTable from '../../components/datagrid/MyDataTable'
-import { AddOutlined, BlockOutlined, CheckOutlined, DeleteOutlined, CategoryOutlined, UploadOutlined, PlusOneOutlined, Delete } from "@mui/icons-material"
+import { AddOutlined, BlockOutlined, CheckOutlined, DeleteOutlined, CategoryOutlined, UploadOutlined, PlusOneOutlined, Delete, DownloadOutlined } from "@mui/icons-material"
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
 import Confirm from '../../components/general/Confirm'
@@ -54,8 +54,9 @@ const AdminSubscribersPage=props=>{
             <Typography variant="h3" component={'h3'} >Subscribers</Typography>
             {/* <Fab sx={{margin:2}} color="primary" variant="extended" ><AddOutlined/>New Users</Fab> */}
             <div>
-                <Fab sx={{margin:1}} onClick={e=>setAddModal(true)} variant="extended" color="primary" ><AddOutlined/>Add one</Fab>
+                <Fab sx={{margin:1}} onClick={e=>setAddModal(true)} variant="extended" color="warning" ><AddOutlined/>Add one</Fab>
                 <Fab sx={{margin:1}} onClick={e=>setUploadModal(true)} variant="extended" color="primary" ><UploadOutlined/>Upload CSV</Fab>
+                <Fab sx={{margin:1}} onClick={e=>setUploadModal(true)} variant="extended" color="success" ><DownloadOutlined/>Download CSV</Fab>
                 <Fab sx={{margin:1}} onClick={e=>setDeleteAllModal(true)} variant="extended" color="secondary" ><DeleteOutlined/>Delete All</Fab>
             </div>
             <MyDataTable onFetchData={(page,pagesize)=>getPageData(page,pagesize)} pagedata={PageData&&PageData.pagedata} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumbers} page={PageData&&PageData.page} headers={headers} />
