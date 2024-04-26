@@ -93,7 +93,7 @@ const AdminSubscribersPage=props=>{
 
                 </DialogActions>
             </Dialog>
-            <Confirm open={DeleteAllModal} onCancel={e=>setDeleteAllModal(false)} onOk={e=>{}} />
+            <Confirm open={DeleteAllModal} onCancel={e=>setDeleteAllModal(false)} onOk={e=>{}} text={`Are you sure to delete all subscribers?`} />
         </>
     )
 }
